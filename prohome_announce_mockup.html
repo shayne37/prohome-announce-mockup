@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)https://force.soomgo.com/banner -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>고수 홈 공지 관리 - Mockup</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif; font-size:14px; color:#333; background:#f5f5f5; display:flex; min-height:100vh; }
+.topbar { position:fixed; top:0; left:0; right:0; height:56px; background:#4a5568; display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:100; box-shadow:0 2px 4px rgba(0,0,0,0.15); }
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-icon { width:34px; height:34px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.logo span { color:white; font-size:17px; font-weight:700; }
+.topbar-btns { display:flex; gap:10px; }
+.topbar-btns button { background:none; border:none; color:rgba(255,255,255,0.8); font-size:18px; cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:6px; }
+.sidebar { position:fixed; top:56px; left:0; width:240px; height:calc(100vh - 56px); background:white; border-right:1px solid #e2e8f0; overflow-y:auto; z-index:90; }
+.sidebar-user { padding:20px 16px 16px; text-align:center; border-bottom:1px solid #f0f0f0; }
+.user-avatar { width:44px; height:44px; background:#F9588F; border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:16px; }
+.user-team { font-size:11px; color:#999; margin-bottom:3px; }
+.user-name { font-size:15px; font-weight:700; color:#222; }
+.user-email { font-size:11px; color:#aaa; margin-top:3px; }
+.user-role { display:inline-block; margin-top:8px; font-size:11px; font-weight:700; color:#F9588F; background:#fff0f5; border:1px solid #fccdd8; border-radius:20px; padding:2px 10px; }
+.menu-item { display:flex; align-items:center; gap:9px; padding:9px 16px; cursor:pointer; color:#666; font-size:13px; }
+.menu-item:hover { background:#fafafa; }
+.menu-item .icon { width:17px; font-size:14px; opacity:0.7; flex-shrink:0; }
+.menu-group-toggle { display:flex; align-items:center; gap:9px; padding:9px 16px; cursor:pointer; color:#333; font-size:13px; font-weight:600; background:#f8f9fa; }
+.menu-group-toggle .icon { width:17px; font-size:14px; flex-shrink:0; }
+.menu-sub { background:#fafafa; }
+.menu-sub .menu-item { padding-left:38px; font-size:12.5px; color:#777; }
+.menu-sub .menu-item:hover { color:#F9588F; background:#fff5f8; }
+.menu-sub .menu-item.active-sub { color:#F9588F; font-weight:700; background:#fff0f5; border-right:3px solid #F9588F; }
+.main { margin-left:240px; margin-top:56px; flex:1; padding:28px 32px; }
+.breadcrumb { font-size:12px; color:#aaa; margin-bottom:8px; display:flex; gap:5px; align-items:center; }
+.breadcrumb a { color:#aaa; text-decoration:none; cursor:pointer; }
+.breadcrumb a:hover { color:#F9588F; }
+.breadcrumb-sep { color:#d1d5db; }
+h1 { font-size:22px; font-weight:800; margin-bottom:22px; color:#1a202c; }
+.search-card { background:white; border:1px solid #e2e8f0; border-radius:10px; padding:20px 22px; margin-bottom:18px; }
+.search-row { display:flex; gap:18px; align-items:flex-end; flex-wrap:wrap; }
+.search-row + .search-row { margin-top:14px; }
+.fg { display:flex; flex-direction:column; gap:5px; }
+.fg label { font-size:12px; font-weight:600; color:#555; }
+.fg input, .fg select { height:36px; border:1px solid #d1d5db; border-radius:7px; padding:0 11px; font-size:13px; color:#333; outline:none; background:white; }
+.date-range { display:flex; align-items:center; gap:7px; }
+.date-range input { width:130px; }
+.date-sep { color:#bbb; font-size:13px; }
+.btn-group { display:flex; gap:8px; }
+.btn { height:36px; padding:0 18px; border-radius:7px; font-size:13px; font-weight:500; cursor:pointer; border:none; }
+.btn-reset { background:white; border:1px solid #d1d5db; color:#555; }
+.btn-search { background:#F9588F; color:white; font-weight:600; }
+.tbl-ctrl { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.result-count { font-size:14px; color:#555; }
+.result-count strong { color:#F9588F; font-weight:700; }
+.tbl-actions { display:flex; gap:8px; }
+.btn-secondary { height:36px; padding:0 16px; border-radius:7px; font-size:13px; font-weight:500; cursor:pointer; background:white; border:1px solid #d1d5db; color:#444; }
+.btn-primary { height:36px; padding:0 18px; border-radius:7px; font-size:13px; font-weight:700; cursor:pointer; background:#F9588F; color:white; border:none; }
+.tbl-wrap { background:white; border:1px solid #e2e8f0; border-radius:10px; overflow:hidden; }
+.pg-row { display:flex; justify-content:flex-end; align-items:center; gap:8px; padding:10px 16px; border-bottom:1px solid #f0f0f0; font-size:13px; color:#666; }
+.pg-row select { height:30px; border:1px solid #d1d5db; border-radius:5px; padding:0 6px; font-size:13px; }
+.pg-btn { background:white; border:1px solid #d1d5db; width:28px; height:28px; border-radius:5px; cursor:pointer; font-size:13px; color:#555; }
+table { width:100%; border-collapse:collapse; }
+thead tr { background:#f8f9fa; }
+thead th { padding:11px 14px; font-size:12.5px; font-weight:700; color:#555; border-bottom:1px solid #e2e8f0; text-align:left; white-space:nowrap; }
+tbody tr { border-bottom:1px solid #f0f0f0; }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover { background:#fafafa; }
+tbody td { padding:12px 14px; font-size:13px; color:#333; vertical-align:middle; }
+.status { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+.s-wait { background:#f3f4f6; color:#6b7280; }
+.s-on { background:#ecfdf5; color:#059669; }
+.s-end { background:#f9fafb; color:#9ca3af; border:1px solid #e5e7eb; }
+.dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+.d-wait { background:#9ca3af; }
+.d-on { background:#10b981; }
+.d-end { background:#d1d5db; }
+.tgl-wrap { display:flex; align-items:center; gap:8px; }
+.tgl { position:relative; width:40px; height:22px; cursor:pointer; display:inline-block; flex-shrink:0; }
+.tgl input { opacity:0; width:0; height:0; position:absolute; }
+.tgl-track { position:absolute; inset:0; border-radius:11px; background:#d1d5db; transition:background 0.2s; }
+.tgl input:checked + .tgl-track { background:#F9588F; }
+.tgl-thumb { position:absolute; top:2px; left:2px; width:18px; height:18px; background:white; border-radius:50%; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2); pointer-events:none; }
+.tgl input:checked ~ .tgl-thumb { transform:translateX(18px); }
+.tgl-on { font-size:12px; font-weight:700; color:#F9588F; }
+.tgl-off { font-size:12px; color:#9ca3af; }
+.notice-pill { display:inline-block; font-size:11px; background:#fff0f5; color:#F9588F; border:1px solid #fccdd8; border-radius:4px; padding:1px 7px; margin-right:7px; font-weight:700; }
+.act-edit { color:#F9588F; background:white; border:1px solid #F9588F; border-radius:5px; padding:5px 13px; font-size:12px; cursor:pointer; font-weight:600; }
+.act-disabled { color:#d1d5db; background:#f9fafb; border:1px solid #e5e7eb; border-radius:5px; padding:5px 13px; font-size:12px; cursor:not-allowed; font-weight:600; }
+.tip-wrap { position:relative; display:inline-block; }
+.tip-wrap:hover .tip { opacity:1; }
+.tip { opacity:0; position:absolute; bottom:calc(100% + 7px); left:50%; transform:translateX(-50%); background:#374151; color:white; font-size:11px; padding:5px 10px; border-radius:6px; white-space:nowrap; z-index:20; transition:opacity 0.15s; pointer-events:none; }
+.tip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#374151; }
+/* FORM SCREEN */
+.form-card { background:white; border:1px solid #e2e8f0; border-radius:10px; padding:28px 32px; max-width:680px; }
+.form-card-title { font-size:15px; font-weight:700; color:#1a202c; padding-bottom:14px; border-bottom:1px solid #f0f0f0; margin-bottom:24px; }
+.ff { margin-bottom:22px; }
+.ff label { display:block; font-size:13px; font-weight:700; color:#333; margin-bottom:7px; }
+.ff input[type=text] { width:100%; height:40px; border:1px solid #d1d5db; border-radius:7px; padding:0 12px; font-size:14px; outline:none; }
+.ff input:focus { border-color:#F9588F; box-shadow:0 0 0 3px rgba(249,88,143,0.1); }
+.ff .hint { font-size:11.5px; color:#9ca3af; margin-top:6px; }
+.ff .date-input-wrap { position:relative; width:220px; }
+.ff .date-input-wrap input { width:100%; padding-right:38px; }
+.ff .cal-icon { position:absolute; right:11px; top:50%; transform:translateY(-50%); font-size:16px; color:#9ca3af; pointer-events:none; }
+.req { color:#F9588F; }
+.form-footer { display:flex; justify-content:space-between; align-items:center; max-width:680px; margin-top:20px; }
+.btn-back { height:40px; padding:0 24px; border-radius:7px; background:white; border:1px solid #d1d5db; color:#555; font-size:14px; cursor:pointer; }
+.btn-save { height:40px; padding:0 28px; border-radius:7px; background:#F9588F; color:white; border:none; font-size:14px; font-weight:700; cursor:pointer; }
+</style>
+<style id="claude-agent-animation-styles">
+      @keyframes claude-pulse {
+        0% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+        50% {
+          box-shadow: 
+            inset 0 0 15px rgba(217, 119, 87, 0.7),
+            inset 0 0 25px rgba(217, 119, 87, 0.5),
+            inset 0 0 35px rgba(217, 119, 87, 0.2);
+        }
+        100% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+      }
+    </style></head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="9" r="5" stroke="white" stroke-width="2"></circle>
+        <path d="M3 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="white" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+    </div>
+    <span>Soomgo</span>
+  </div>
+  <div class="topbar-btns">
+    <button>☰</button>
+    <button>⏎</button>
+  </div>
+</header>
+
+<nav class="sidebar">
+  <div class="sidebar-user">
+    <div class="user-avatar">S</div>
+    <div class="user-team">Product 팀</div>
+    <div class="user-name">Shayne Kim</div>
+    <div class="user-email">shayne@soomgo.com</div>
+    <div class="user-role">Manager</div>
+  </div>
+  <div>
+    <div class="menu-item"><span class="icon">⊞</span>대시보드</div>
+    <div class="menu-item"><span class="icon">👤</span>회원관리</div>
+    <div class="menu-item"><span class="icon">📋</span>작성된 요청서</div>
+    <div class="menu-item"><span class="icon">🪙</span>숨고캐시 관리</div>
+    <div class="menu-item"><span class="icon">💳</span>숨고페이 관리</div>
+    <div class="menu-item"><span class="icon">🔧</span>서비스 관리</div>
+    <div class="menu-item"><span class="icon">📝</span>요청폼 관리</div>
+    <div class="menu-item"><span class="icon">⚡</span>스마트견적 관리</div>
+    <div class="menu-item"><span class="icon">🛒</span>마켓 관리</div>
+    <div class="menu-item"><span class="icon">💬</span>커뮤니티</div>
+    <div class="menu-item"><span class="icon">📢</span>마케팅/SEO 관리</div>
+    <div class="menu-item"><span class="icon">🖼</span>배너 관리</div>
+    <div class="menu-group-toggle"><span class="icon">🏠</span>고수 홈 관리 ▾</div>
+    <div class="menu-sub">
+      <div class="menu-item active-sub" id="nav-list" onclick="showList()">고수 홈 공지 관리</div>
+      <div class="menu-item">고수 홈 배너 관리</div>
+      <div class="menu-item">고수 홈 성공 가이드 관리</div>
+      <div class="menu-item">고수 홈 성과 분석 관리</div>
+    </div>
+    <div class="menu-item"><span class="icon">🎁</span>프로모션 관리</div>
+    <div class="menu-item"><span class="icon">✏️</span>블로그</div>
+    <div class="menu-item"><span class="icon">📊</span>광고 구좌 관리</div>
+    <div class="menu-item"><span class="icon">⚙️</span>관리</div>
+  </div>
+</nav>
+
+<main class="main" id="main-area">
+    <div class="breadcrumb">
+      <a onclick="showList()">대시보드</a><span class="breadcrumb-sep">/</span>
+      <a onclick="showList()">고수 홈 관리</a><span class="breadcrumb-sep">/</span>
+      공지 관리
+    </div>
+    <h1>공지 관리</h1>
+    <div class="search-card">
+      <div class="search-row">
+        <div class="fg">
+          <label>공지명</label>
+          <input type="text" placeholder="공지 제목을 입력하세요" style="width:220px">
+        </div>
+        <div class="fg">
+          <label>발행일자</label>
+          <div class="date-range">
+            <input type="text" placeholder="yyyy-mm-dd">
+            <span class="date-sep">~</span>
+            <input type="text" placeholder="yyyy-mm-dd">
+          </div>
+        </div>
+        <div class="fg">
+          <label>활성화</label>
+          <select style="width:110px">
+            <option>전체</option><option>On</option><option>Off</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-row">
+        <div class="btn-group" style="margin-top:4px">
+          <button class="btn btn-reset">초기화</button>
+          <button class="btn btn-search">검색</button>
+        </div>
+      </div>
+    </div>
+    <div class="tbl-ctrl">
+      <div class="result-count">총 <strong>6개</strong> 공지</div>
+      <div class="tbl-actions">
+        <button class="btn-secondary">공지 정렬 관리</button>
+        <button class="btn-primary" onclick="showAdd()">+ 새로운 공지 추가</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="pg-row">
+        <span>페이지당 크기</span>
+        <select><option>10</option><option>20</option><option>50</option></select>
+        <button class="pg-btn">‹</button>
+        <button class="pg-btn">›</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:60px">No.</th>
+            <th style="width:140px">이름</th>
+            <th style="width:108px">상태</th>
+            <th style="width:135px">활성화</th>
+            <th>제목</th>
+            <th style="width:108px">발행일자</th>
+            <th style="width:118px">최근 수정일자</th>
+            <th style="width:112px">최근 등록자</th>
+            <th style="width:80px;text-align:center">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>6</td>
+            <td style="font-size:13px; color:#555;">4월 이벤트 공지</td>
+            <td><span class="status s-on"><span class="dot d-on"></span>진행 중</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox" checked=""><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-on">노출</span></div></td>
+            <td><span class="notice-pill">공지</span>2026년 4월 숨고 이벤트 안내</td>
+            <td>2026-04-01</td><td>2026-03-28</td><td>Rose Kwak</td>
+            <td style="text-align:center"><div class="tip-wrap"><button class="act-disabled">수정</button><div class="tip">On 상태일 때는 수정 불가</div></div></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td style="font-size:13px; color:#555;">약관 개정 안내</td>
+            <td><span class="status s-on"><span class="dot d-on"></span>진행 중</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox" checked=""><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-on">노출</span></div></td>
+            <td><span class="notice-pill">공지</span>숨고 서비스 이용 약관 개정 안내</td>
+            <td>2026-03-15</td><td>2026-03-14</td><td>Zoe Park</td>
+            <td style="text-align:center"><div class="tip-wrap"><button class="act-disabled">수정</button><div class="tip">On 상태일 때는 수정 불가</div></div></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td style="font-size:13px; color:#555;">고수 홈 개편</td>
+            <td><span class="status s-on"><span class="dot d-on"></span>진행 중</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox" checked=""><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-on">노출</span></div></td>
+            <td><span class="notice-pill">공지</span>고수 홈 개편 안내</td>
+            <td>2026-02-20</td><td>2026-02-19</td><td>Shayne Kim</td>
+            <td style="text-align:center"><div class="tip-wrap"><button class="act-disabled">수정</button><div class="tip">On 상태일 때는 수정 불가</div></div></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td style="font-size:13px; color:#555;">5월 점검</td>
+            <td><span class="status s-wait"><span class="dot d-wait"></span>대기</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox"><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-off">노출안함</span></div></td>
+            <td><span class="notice-pill">공지</span>5월 정기 점검 공지</td>
+            <td>2026-05-01</td><td>2026-03-25</td><td>Rose Kwak</td>
+            <td style="text-align:center"><button class="act-edit" onclick="showEdit()">수정</button></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td style="font-size:13px; color:#555;">캐시 정책 변경</td>
+            <td><span class="status s-end"><span class="dot d-end"></span>종료</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox"><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-off">노출안함</span></div></td>
+            <td><span class="notice-pill">공지</span>2026년 1월 캐시 정책 변경 안내</td>
+            <td>2026-01-10</td><td>2026-01-09</td><td>Hee Choi</td>
+            <td style="text-align:center"><button class="act-edit" onclick="showEdit()">수정</button></td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td style="font-size:13px; color:#555;">연말 이벤트</td>
+            <td><span class="status s-end"><span class="dot d-end"></span>종료</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox"><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-off">노출안함</span></div></td>
+            <td><span class="notice-pill">공지</span>숨고 연말 이벤트 안내</td>
+            <td>2025-12-20</td><td>2025-12-18</td><td>Hee Choi</td>
+            <td style="text-align:center"><button class="act-edit" onclick="showEdit()">수정</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pg-row">
+        <span>페이지당 크기</span>
+        <select><option>10</option><option>20</option><option>50</option></select>
+        <button class="pg-btn">‹</button>
+        <button class="pg-btn">›</button>
+      </div>
+    </div>
+  </main>
+
+<script>
+function showList() {
+  document.getElementById('main-area').innerHTML = `
+    <div class="breadcrumb">
+      <a onclick="showList()">대시보드</a><span class="breadcrumb-sep">/</span>
+      <a onclick="showList()">고수 홈 관리</a><span class="breadcrumb-sep">/</span>
+      공지 관리
+    </div>
+    <h1>공지 관리</h1>
+    <div class="search-card">
+      <div class="search-row">
+        <div class="fg">
+          <label>공지명</label>
+          <input type="text" placeholder="공지 제목을 입력하세요" style="width:220px">
+        </div>
+        <div class="fg">
+          <label>발행일자</label>
+          <div class="date-range">
+            <input type="text" placeholder="yyyy-mm-dd">
+            <span class="date-sep">~</span>
+            <input type="text" placeholder="yyyy-mm-dd">
+          </div>
+        </div>
+        <div class="fg">
+          <label>활성화</label>
+          <select style="width:110px">
+            <option>전체</option><option>On</option><option>Off</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-row">
+        <div class="btn-group" style="margin-top:4px">
+          <button class="btn btn-reset">초기화</button>
+          <button class="btn btn-search">검색</button>
+        </div>
+      </div>
+    </div>
+    <div class="tbl-ctrl">
+      <div class="result-count">총 <strong>6개</strong> 공지</div>
+      <div class="tbl-actions">
+        <button class="btn-secondary">공지 정렬 관리</button>
+        <button class="btn-primary" onclick="showAdd()">+ 새로운 공지 추가</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="pg-row">
+        <span>페이지당 크기</span>
+        <select><option>10</option><option>20</option><option>50</option></select>
+        <button class="pg-btn">‹</button>
+        <button class="pg-btn">›</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:60px">No.</th>
+            <th style="width:108px">상태</th>
+            <th style="width:135px">활성화</th>
+            <th>제목</th>
+            <th style="width:108px">발행일자</th>
+            <th style="width:118px">최근 수정일자</th>
+            <th style="width:112px">최근 등록자</th>
+            <th style="width:80px;text-align:center">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>6</td>
+            <td><span class="status s-on"><span class="dot d-on"></span>진행 중</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-on">노출</span></div></td>
+            <td><span class="notice-pill">공지</span>2026년 4월 숨고 이벤트 안내</td>
+            <td>2026-04-01</td><td>2026-03-28</td><td>Rose Kwak</td>
+            <td style="text-align:center"><div class="tip-wrap"><button class="act-disabled">수정</button><div class="tip">On 상태일 때는 수정 불가</div></div></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><span class="status s-on"><span class="dot d-on"></span>진행 중</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-on">노출</span></div></td>
+            <td><span class="notice-pill">공지</span>숨고 서비스 이용 약관 개정 안내</td>
+            <td>2026-03-15</td><td>2026-03-14</td><td>Zoe Park</td>
+            <td style="text-align:center"><div class="tip-wrap"><button class="act-disabled">수정</button><div class="tip">On 상태일 때는 수정 불가</div></div></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><span class="status s-on"><span class="dot d-on"></span>진행 중</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-on">노출</span></div></td>
+            <td><span class="notice-pill">공지</span>고수 홈 개편 안내</td>
+            <td>2026-02-20</td><td>2026-02-19</td><td>Shayne Kim</td>
+            <td style="text-align:center"><div class="tip-wrap"><button class="act-disabled">수정</button><div class="tip">On 상태일 때는 수정 불가</div></div></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><span class="status s-wait"><span class="dot d-wait"></span>대기</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox"><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-off">노출안함</span></div></td>
+            <td><span class="notice-pill">공지</span>5월 정기 점검 공지</td>
+            <td>2026-05-01</td><td>2026-03-25</td><td>Rose Kwak</td>
+            <td style="text-align:center"><button class="act-edit" onclick="showEdit()">수정</button></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="status s-end"><span class="dot d-end"></span>종료</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox"><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-off">노출안함</span></div></td>
+            <td><span class="notice-pill">공지</span>2026년 1월 캐시 정책 변경 안내</td>
+            <td>2026-01-10</td><td>2026-01-09</td><td>Hee Choi</td>
+            <td style="text-align:center"><button class="act-edit" onclick="showEdit()">수정</button></td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td><span class="status s-end"><span class="dot d-end"></span>종료</span></td>
+            <td><div class="tgl-wrap"><label class="tgl"><input type="checkbox"><div class="tgl-track"></div><div class="tgl-thumb"></div></label><span class="tgl-off">노출안함</span></div></td>
+            <td><span class="notice-pill">공지</span>숨고 연말 이벤트 안내</td>
+            <td>2025-12-20</td><td>2025-12-18</td><td>Hee Choi</td>
+            <td style="text-align:center"><button class="act-edit" onclick="showEdit()">수정</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pg-row">
+        <span>페이지당 크기</span>
+        <select><option>10</option><option>20</option><option>50</option></select>
+        <button class="pg-btn">‹</button>
+        <button class="pg-btn">›</button>
+      </div>
+    </div>
+  `;
+}
+
+function showAdd() {
+  document.getElementById('main-area').innerHTML = `
+    <div class="breadcrumb">
+      <a onclick="showList()">대시보드</a><span class="breadcrumb-sep">/</span>
+      <a onclick="showList()">고수 홈 관리</a><span class="breadcrumb-sep">/</span>
+      <a onclick="showList()">공지 관리</a><span class="breadcrumb-sep">/</span>
+      공지 등록
+    </div>
+    <h1>공지 등록</h1>
+    <div class="form-card">
+      <div class="form-card-title">기본 정보</div>
+      <div class="ff">
+        <label>제목 <span class="req">*</span></label>
+        <input type="text" placeholder="공지 제목을 입력하세요">
+        <div class="hint">실사용자에게 보여지는 정보 / 띄어쓰기 포함 15자 이내 권장 (이상 말줄임 표기)</div>
+      </div>
+      <div class="ff">
+        <label>발행일자 <span class="req">*</span></label>
+        <div class="date-input-wrap">
+          <input type="text" placeholder="yyyy-mm-dd">
+          <span class="cal-icon">📅</span>
+        </div>
+        <div class="hint">발행일 00시 00분에 활성화 상태면 사용자 화면에 자동 노출됩니다</div>
+      </div>
+      <div class="ff" style="margin-bottom:0">
+        <label>링크 URL <span class="req">*</span></label>
+        <input type="text" placeholder="https://soomgo.com/...">
+        <div class="hint">웹링크를 입력해 주세요 (앱에서는 웹뷰로 랜딩됩니다)</div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-back" onclick="showList()">목록으로</button>
+      <button class="btn-save">저장하기</button>
+    </div>
+  `;
+}
+
+function showEdit() {
+  document.getElementById('main-area').innerHTML = `
+    <div class="breadcrumb">
+      <a onclick="showList()">대시보드</a><span class="breadcrumb-sep">/</span>
+      <a onclick="showList()">고수 홈 관리</a><span class="breadcrumb-sep">/</span>
+      <a onclick="showList()">공지 관리</a><span class="breadcrumb-sep">/</span>
+      공지 수정
+    </div>
+    <h1>공지 수정</h1>
+    <div class="form-card">
+      <div class="form-card-title">기본 정보</div>
+      <div class="ff">
+        <label>제목 <span class="req">*</span></label>
+        <input type="text" value="5월 정기 점검 공지">
+        <div class="hint">실사용자에게 보여지는 정보 / 띄어쓰기 포함 15자 이내 권장 (이상 말줄임 표기)</div>
+      </div>
+      <div class="ff">
+        <label>발행일자 <span class="req">*</span></label>
+        <div class="date-input-wrap">
+          <input type="text" value="2026-05-01">
+          <span class="cal-icon">📅</span>
+        </div>
+        <div class="hint">발행일 00시 00분에 활성화 상태면 사용자 화면에 자동 노출됩니다</div>
+      </div>
+      <div class="ff" style="margin-bottom:0">
+        <label>링크 URL <span class="req">*</span></label>
+        <input type="text" value="https://soomgo.com/notices/maintenance-may">
+        <div class="hint">웹링크를 입력해 주세요 (앱에서는 웹뷰로 랜딩됩니다)</div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-back" onclick="showList()">목록으로</button>
+      <button class="btn-save">저장하기</button>
+    </div>
+  `;
+}
+
+// Initialize
+showList();
+</script>
+
+</body></html>
