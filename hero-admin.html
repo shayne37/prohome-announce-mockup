@@ -687,7 +687,6 @@ CSV 템플릿 다운로드 후 파일 업로드</div>
               <div class="form-card-title">기본 정보</div>
               <div class="ff-grid">
                 <div class="ff"><label>이름 <span class="req">*</span></label><input type="text" ${isEdit ? 'value="재구매 쿠폰 리워드"' : 'placeholder="운영자용 이름을 입력하세요"'}><div class="hint">운영자 및 숨고 내부 직원이 사용하는 혜택 이름입니다.</div></div>
-                ${isEdit ? `<div class="ff"><label>활성화 <span class="req">*</span></label><select><option>Off</option><option selected>On</option></select><div class="hint">활성화 On 상태의 혜택 리스트는 최대 20개까지 허용됩니다.</div></div>` : ``}
                 <div class="ff full"><label>혜택 타이틀 <span class="req">*</span></label><input type="text" ${isEdit ? 'value="다음 결제에 바로 쓰는 10% 재구매 쿠폰"' : 'placeholder="혜택 리스트 타이틀을 입력하세요"'}><div class="hint">사용자에게 노출됩니다, 이모지 사용 금지 / 띄어쓰기 포함 15자 이내 초과 시 말줄임 처리</div></div>
                 <div class="ff full">
                   <label>아이콘 <span class="req">*</span></label>
@@ -705,7 +704,6 @@ CSV 템플릿 다운로드 후 파일 업로드</div>
 사진 1개당 최대 10MB 이하</div>
                   </div>
                 </div>
-                <div class="ff full"><label>혜택 설명</label><textarea placeholder="혜택 설명을 입력하세요">${isEdit ? '최근 활동 이력이 있는 고수에게 자동 지급되는 리워드입니다. 다음 결제 시 바로 적용할 수 있어요.' : ''}</textarea></div>
                 <div class="ff"><label>CTA 모웹 링크 <span class="req">*</span></label><input type="text" ${isEdit ? 'value="https://soomgo.com/pro/rewards/coupon"' : 'placeholder="https://m.soomgo.com/..."'}></div>
                 <div class="ff"><label>CTA 앱 딥링크 <span class="req">*</span></label><input type="text" ${isEdit ? 'value="soomgo://pro/rewards/coupon"' : 'placeholder="soomgo://..."'}></div>
               </div>
