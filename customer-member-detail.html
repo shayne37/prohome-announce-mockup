@@ -107,16 +107,49 @@
         display: inline-block; width: 20px; height: 20px; border: 2px solid #7d879a; border-radius: 4px;
       }
 
-      .tabs { display: flex; gap: 28px; padding: 0 16px; border-bottom: 1px solid #dde3ef; }
-      .tab { position: relative; padding: 14px 0 13px; font-size: 14px; font-weight: 800; color: #6b7487; }
+      .tabs {
+        display: flex;
+        gap: 28px;
+        padding: 0 16px;
+        border-bottom: 1px solid #dde3ef;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        scrollbar-width: none;
+      }
+      .tabs::-webkit-scrollbar { display: none; }
+      .tab {
+        position: relative;
+        padding: 14px 0 13px;
+        font-size: 14px;
+        font-weight: 800;
+        color: #6b7487;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
       .tab.active { color: var(--purple); }
       .tab.active::after {
         content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--purple);
       }
 
       .subtabs-box { margin-top: 10px; background: #fff; border: 1px solid var(--line); }
-      .subtabs { display: flex; gap: 38px; padding: 18px 20px; }
-      .subtab { font-size: 14px; font-weight: 800; color: #6c7486; }
+      .subtabs {
+        display: flex;
+        gap: 38px;
+        padding: 18px 20px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        scrollbar-width: none;
+      }
+      .subtabs::-webkit-scrollbar { display: none; }
+      .subtab {
+        font-size: 14px;
+        font-weight: 800;
+        color: #6c7486;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
       .subtab.active { color: var(--purple); }
 
       .search-area { padding: 12px 0 0; }
