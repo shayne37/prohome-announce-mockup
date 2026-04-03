@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>채팅 상세</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f8fc;
+        --surface: #ffffff;
+        --line: #e5e9f2;
+        --line-soft: #eef2f8;
+        --purple: #5448e5;
+        --purple-top: #5a4deb;
+        --text: #1f2533;
+        --muted: #8b94a7;
+        --sidebar: #2d3446;
+        --green: #3fbe7b;
+        --shadow: 0 10px 28px rgba(28, 42, 72, 0.06);
+        --radius: 14px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Noto Sans KR", sans-serif;
+      }
+
+      body { min-width: 1500px; }
+
+      .topbar {
+        height: 58px;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(90deg, #4f46dd 0%, #5a4fe3 100%);
+        color: #fff;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 23px;
+        font-style: italic;
+        font-weight: 800;
+      }
+
+      .top-icons {
+        display: flex;
+        gap: 18px;
+      }
+
+      .top-icons svg { width: 26px; height: 26px; }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 228px minmax(0, 1fr);
+        min-height: calc(100vh - 58px);
+      }
+
+      .sidebar {
+        background: #fff;
+        border-right: 1px solid #dde4ef;
+      }
+
+      .profile {
+        text-align: center;
+        padding: 22px 16px 18px;
+        border-bottom: 1px solid #dde4ef;
+      }
+
+      .profile .team { font-size: 16px; font-weight: 700; color: #66748f; }
+      .profile .name { margin-top: 3px; font-size: 18px; font-weight: 800; }
+      .profile .email { margin-top: 2px; font-size: 12px; color: #a9b0bf; }
+      .profile .role { font-size: 14px; font-weight: 700; color: #1d63e2; }
+
+      .menu { padding: 14px 0; }
+      .menu-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 18px;
+        color: #31394a;
+        font-size: 14px;
+      }
+
+      .menu-row .chevron { margin-left: auto; }
+
+      .content { padding: 18px 22px 28px; }
+      .breadcrumb { font-size: 13px; color: var(--muted); }
+      .page-title {
+        margin: 8px 0 20px;
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 392px minmax(0, 1fr);
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .card-title {
+        padding: 14px 16px;
+        font-size: 15px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--line);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      .info-table th,
+      .info-table td,
+      .quote-table th,
+      .quote-table td {
+        padding: 10px 14px;
+        font-size: 13px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      .info-table th,
+      .quote-table th {
+        width: 156px;
+        background: #fafbfe;
+        font-weight: 700;
+      }
+
+      .link-text {
+        color: var(--purple);
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .quote-wrap { margin-top: 18px; }
+
+      .tabs {
+        display: flex;
+        gap: 28px;
+        border-bottom: 1px solid #dde3ef;
+        margin-bottom: 12px;
+      }
+
+      .tab {
+        padding: 14px 0 13px;
+        color: #6b7487;
+        font-size: 14px;
+        font-weight: 800;
+        position: relative;
+      }
+
+      .tab.active { color: var(--purple); }
+      .tab.active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 2px;
+        background: var(--purple);
+      }
+
+      .chat-head {
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #3b4252;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .toggle-dot {
+        width: 28px;
+        height: 14px;
+        border-radius: 999px;
+        background: rgba(84, 72, 229, 0.2);
+        position: relative;
+      }
+
+      .toggle-dot::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: -1px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--purple);
+      }
+
+      .chat-toolbar {
+        margin-top: 14px;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .select-mini {
+        min-width: 62px;
+        height: 34px;
+        border-bottom: 1px solid #8891a4;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 14px;
+        color: #2d3647;
+      }
+
+      .toolbar-center {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: #d3d7e0;
+        font-size: 28px;
+      }
+
+      .toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+        color: #4e5666;
+      }
+
+      .radio {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .radio .dot {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #aab2c2;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .radio.active .dot {
+        border-color: var(--purple);
+        box-shadow: inset 0 0 0 3px #fff;
+        background: var(--purple);
+      }
+
+      .chat-table thead th {
+        background: #fafbff;
+        color: #677286;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .chat-table tbody td {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        font-size: 12px;
+        vertical-align: top;
+      }
+
+      .role-pill {
+        min-width: 44px;
+        height: 30px;
+        padding: 0 10px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .role-pill.pro { background: var(--purple); }
+      .role-pill.customer { background: var(--green); }
+
+      .message-cell {
+        font-size: 12px;
+        line-height: 1.7;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span>Soomgo</span>
+        <svg width="35" height="20" viewBox="0 0 35 20" fill="none" aria-hidden="true">
+          <circle cx="11" cy="5" r="4.2" fill="white" opacity="0.95" />
+          <path d="M3 18c0-3.6 3.6-6.5 8-6.5s8 2.9 8 6.5" fill="white" opacity="0.95" />
+          <circle cx="26" cy="6" r="3.2" fill="white" opacity="0.9" />
+          <path d="M20 18c0-2.9 2.8-5.2 6.3-5.2 3.5 0 6.4 2.3 6.4 5.2" fill="white" opacity="0.9" />
+        </svg>
+      </div>
+      <div class="top-icons">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="white" stroke-width="2.1" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 7h10v10M19 5l-8 8M5 19l4-4" stroke="white" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="profile">
+          <div class="team">Product 팀</div>
+          <div class="name">Shayne Kim</div>
+          <div class="email">shayne@soomgo.com</div>
+          <div class="role">Manager</div>
+        </div>
+        <div class="menu">
+          <div class="menu-row">대시보드</div>
+          <div class="menu-row">회원관리 <span class="chevron">⌄</span></div>
+          <div class="menu-row">작성된 요청서</div>
+          <div class="menu-row">숨고캐시 관리 <span class="chevron">⌄</span></div>
+          <div class="menu-row">숨고페이 관리 <span class="chevron">⌄</span></div>
+          <div class="menu-row">서비스 관리 <span class="chevron">⌄</span></div>
+          <div class="menu-row">요청폼 관리 <span class="chevron">⌄</span></div>
+          <div class="menu-row">스마트견적 관리 <span class="chevron">⌄</span></div>
+          <div class="menu-row">마켓 관리 <span class="chevron">⌄</span></div>
+          <div class="menu-row">커뮤니티 <span class="chevron">⌄</span></div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="breadcrumb">대시보드 / 회원관리 / 회원조회</div>
+        <h1 class="page-title">견적 상세</h1>
+
+        <div class="layout">
+          <section>
+            <div class="card">
+              <div class="card-title">견적정보</div>
+              <table class="info-table">
+                <tbody>
+                  <tr><th>견적 번호</th><td>222823997</td></tr>
+                  <tr><th>서비스 명</th><td>정리수납 컨설팅</td></tr>
+                  <tr><th>요청서 아이디</th><td><a class="link-text" href="#">69c8 ... ff63 ↗</a></td></tr>
+                  <tr><th>고수 회원번호</th><td><a class="link-text" href="#">11004888 ↗</a></td></tr>
+                  <tr><th>고수 이름</th><td>홈스타일리스트 니니맘</td></tr>
+                  <tr><th>고수 이메일</th><td>ldylovepyc@naver.com</td></tr>
+                  <tr><th>고객 회원번호</th><td><a class="link-text" href="#">9664229 ↗</a></td></tr>
+                  <tr><th>고객 이름</th><td>김세연</td></tr>
+                  <tr><th>고객 이메일</th><td>shayne+11@soomgo.com</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card quote-wrap">
+              <div class="card-title">견적서</div>
+              <table class="quote-table">
+                <tbody>
+                  <tr><th>견적 발송일시</th><td>2026-03-29 10:30:34</td></tr>
+                  <tr><th>견적 열람일시</th><td>2026-03-29 10:33:58</td></tr>
+                  <tr><th>고용 일시</th><td>2026-03-29 20:27:58</td></tr>
+                  <tr><th>숨고페이 결제일시</th><td></td></tr>
+                  <tr><th>리뷰 작성일시</th><td></td></tr>
+                  <tr><th>자동견적 유무</th><td>N</td></tr>
+                  <tr><th>자동보상 유무</th><td>N</td></tr>
+                  <tr><th>견적발송 캐시</th><td>3,690 캐시</td></tr>
+                  <tr><th>견적발송 캐시 보상</th><td><a class="link-text" href="#">캐시 보상</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <div class="tabs">
+              <div class="tab active">채팅 정보</div>
+              <div class="tab">안심통화 정보</div>
+              <div class="tab">숨고전화 정보</div>
+            </div>
+
+            <div class="card">
+              <div class="chat-head">
+                <span id="chatTitle">채팅 ID 214265656</span>
+                <span class="toggle"><span class="toggle-dot" aria-hidden="true"></span>숨게</span>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:14px;">
+              <div class="chat-toolbar">
+                <div class="select-mini">
+                  <span>50</span>
+                  <span>▼</span>
+                </div>
+                <div class="toolbar-center">
+                  <span>◀</span>
+                  <span>▶</span>
+                </div>
+                <div class="toolbar-right">
+                  <span class="radio active"><span class="dot"></span>최신순</span>
+                  <span class="radio"><span class="dot"></span>오래된순</span>
+                </div>
+              </div>
+
+              <table class="chat-table">
+                <thead>
+                  <tr>
+                    <th style="width:168px;">메시지 ID</th>
+                    <th style="width:110px;">사용자</th>
+                    <th>메시지</th>
+                    <th style="width:180px;">생성 일시</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1976435479</td>
+                    <td><span class="role-pill pro">고수</span></td>
+                    <td class="message-cell">ㅎㅎ 넵^^ 감사합니다:) 또 궁금하신점 언제든 챗주세요^^</td>
+                    <td>2026-03-30 11:38:12</td>
+                  </tr>
+                  <tr>
+                    <td>1976431830</td>
+                    <td><span class="role-pill customer">고객</span></td>
+                    <td class="message-cell">아 말씀주셔도 괜찮습니다 한 번 정리하라고 전달할게요!</td>
+                    <td>2026-03-30 11:36:34</td>
+                  </tr>
+                  <tr>
+                    <td>1976424720</td>
+                    <td><span class="role-pill pro">고수</span></td>
+                    <td class="message-cell">맞습니다! 제가한번더 고객님께 분류 후 여쭤보겠지만, 이미 전부 버렸다!해서 물어보지않았으면 .. 하는 고객님도 계시거든요 ㅎㅎ</td>
+                    <td>2026-03-30 11:33:11</td>
+                  </tr>
+                  <tr>
+                    <td>1976401785</td>
+                    <td><span class="role-pill customer">고객</span></td>
+                    <td class="message-cell">안내 감사합니다! 추가로 비울게 없다는건 버릴거 없는지 확인해 달라는 말씀이실까요??</td>
+                    <td>2026-03-30 11:23:07</td>
+                  </tr>
+                  <tr>
+                    <td>1976395677</td>
+                    <td><span class="role-pill pro">고수</span></td>
+                    <td class="message-cell">https://link.coupang.com/a/eeaCzY</td>
+                    <td>2026-03-30 11:20:24</td>
+                  </tr>
+                  <tr>
+                    <td>1976395614</td>
+                    <td><span class="role-pill pro">고수</span></td>
+                    <td class="message-cell">저희가 준비하는 물품의 경우, 화이트랙빈 이라는 옷걸이나 아래의 링크제품을 준비하고 있습니다^^</td>
+                    <td>2026-03-30 11:20:22</td>
+                  </tr>
+                  <tr>
+                    <td>1976307041</td>
+                    <td><span class="role-pill customer">고객</span></td>
+                    <td class="message-cell">혹시 추천해주시는 제품이 있을까요?</td>
+                    <td>2026-03-30 10:39:29</td>
+                  </tr>
+                  <tr>
+                    <td>1975776672</td>
+                    <td><span class="role-pill pro">고수</span></td>
+                    <td class="message-cell">쿠팡에서 보시고 편히 말씀해주세요^^ 전문가추천 용품은 가격에 코이라 고 생각하실수있기땜에 자유롭게 보시고 말씀부탁드립니다🙌</td>
+                    <td>2026-03-29 20:35:24</td>
+                  </tr>
+                  <tr>
+                    <td>1975773414</td>
+                    <td><span class="role-pill customer">고객</span></td>
+                    <td class="message-cell">이하 네넵 설명해 주셔서 감사합니다</td>
+                    <td>2026-03-29 20:32:37</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const chatId = params.get("chat");
+      if (chatId) {
+        document.getElementById("chatTitle").textContent = `채팅 ID ${chatId}`;
+      }
+    </script>
+  </body>
+</html>

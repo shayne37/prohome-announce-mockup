@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>회원조회 - 고객</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f8fc;
+        --surface: #ffffff;
+        --line: #e5e9f2;
+        --muted: #8f97a8;
+        --text: #1f2533;
+        --purple: #5448e5;
+        --green: #40b978;
+        --orange: #f9ad25;
+        --disabled: #d9d9dd;
+        --navy: #5a4fe3;
+        --shadow: 0 10px 28px rgba(28, 42, 72, 0.06);
+        --radius: 14px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      body { min-width: 1540px; }
+
+      .topbar {
+        height: 58px;
+        background: linear-gradient(90deg, #4f46dd 0%, #5a4fe3 100%);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 22px;
+      }
+
+      .brand { display: flex; align-items: center; gap: 10px; font-size: 23px; font-style: italic; font-weight: 800; }
+      .top-icons { display: flex; gap: 18px; }
+      .top-icons svg { width: 26px; height: 26px; }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 236px minmax(0, 1fr);
+        min-height: calc(100vh - 58px);
+      }
+
+      .sidebar { background: #fff; border-right: 1px solid #dde4ef; }
+      .profile {
+        text-align: center;
+        padding: 22px 16px 18px;
+        border-bottom: 1px solid #dde4ef;
+      }
+      .profile .team { font-size: 16px; font-weight: 700; color: #66748f; }
+      .profile .name { margin-top: 3px; font-size: 18px; font-weight: 800; }
+      .profile .email { margin-top: 2px; font-size: 12px; color: #a9b0bf; }
+      .profile .role { font-size: 14px; font-weight: 700; color: #1d63e2; }
+      .menu { padding: 14px 0; }
+      .menu-row { display: flex; align-items: center; gap: 12px; padding: 11px 22px; font-size: 14px; color: #31394a; }
+      .menu-row.active { color: var(--purple); font-weight: 800; }
+      .submenu a { display: block; padding: 11px 52px; color: #3b4354; font-size: 14px; text-decoration: none; }
+      .submenu a.active { color: var(--purple); font-weight: 800; }
+
+      .content { padding: 18px 22px 28px; }
+      .breadcrumb { font-size: 13px; color: var(--muted); }
+      .header { display: flex; justify-content: space-between; align-items: flex-end; gap: 18px; margin-top: 8px; }
+      .title { margin: 0; font-size: 28px; font-weight: 800; }
+      .actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+      .btn {
+        height: 40px; padding: 0 18px; border: 0; border-radius: 10px; font: 700 14px "Noto Sans KR", sans-serif;
+        display: inline-flex; align-items: center; justify-content: center; color: #fff;
+      }
+      .btn.primary { background: var(--purple); }
+      .btn.gray { background: #d9d9dd; color: #aeb3c1; }
+      .btn.neutral { background: #ececef; color: #252b38; }
+      .btn.orange { background: var(--orange); }
+      .btn.green { background: var(--green); }
+
+      .layout { display: grid; grid-template-columns: 392px minmax(0, 1fr); gap: 22px; margin-top: 20px; }
+      .card {
+        background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+      }
+      .card-title { padding: 14px 16px; font-size: 15px; font-weight: 800; border-bottom: 1px solid var(--line); }
+      table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+      .info-table th, .info-table td, .req-table th, .req-table td {
+        padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 13px; text-align: left; vertical-align: middle;
+      }
+      .info-table th { width: 138px; background: #fafbfe; font-weight: 700; }
+      .inline-btn {
+        float: right; min-width: 64px; height: 34px; border: 0; border-radius: 10px; background: #d9d9dc; color: #4c5260; font: 700 13px "Noto Sans KR", sans-serif;
+      }
+      .checkbox {
+        display: inline-flex; width: 20px; height: 20px; border-radius: 4px; align-items: center; justify-content: center; background: var(--purple); color: #fff; font-size: 14px; font-weight: 800;
+      }
+      .empty-checkbox {
+        display: inline-block; width: 20px; height: 20px; border: 2px solid #7d879a; border-radius: 4px;
+      }
+
+      .tabs { display: flex; gap: 28px; padding: 0 16px; border-bottom: 1px solid #dde3ef; }
+      .tab { position: relative; padding: 14px 0 13px; font-size: 14px; font-weight: 800; color: #6b7487; }
+      .tab.active { color: var(--purple); }
+      .tab.active::after {
+        content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--purple);
+      }
+
+      .subtabs-box { margin-top: 10px; background: #fff; border: 1px solid var(--line); }
+      .subtabs { display: flex; gap: 38px; padding: 18px 20px; }
+      .subtab { font-size: 14px; font-weight: 800; color: #6c7486; }
+      .subtab.active { color: var(--purple); }
+
+      .search-area { padding: 12px 0 0; }
+      .form-grid { display: grid; grid-template-columns: 214px 1fr 150px 150px; gap: 14px; align-items: end; }
+      .field { position: relative; }
+      .label { display: block; margin: 0 0 5px 8px; font-size: 11px; color: var(--muted); }
+      .input {
+        width: 100%; height: 40px; padding: 0 12px; border: 1px solid #d8deea; border-radius: 10px; background: #fff; font-size: 14px; color: #313849;
+      }
+      .under { border: 0; border-bottom: 1px solid #8790a4; border-radius: 0; padding: 0 26px 0 0; background: transparent; }
+      .icon-right { position: absolute; right: 10px; top: 34px; width: 16px; height: 16px; color: #6f7788; }
+      .actions-row { display: flex; gap: 10px; margin-top: 14px; }
+      .ghost-btn, .search-btn {
+        min-width: 88px; height: 40px; border-radius: 10px; font: 700 14px "Noto Sans KR", sans-serif;
+      }
+      .ghost-btn { border: 1px solid #b9b2ff; background: #fff; color: var(--purple); }
+      .search-btn { border: 0; background: var(--purple); color: #fff; }
+
+      .results-card { margin-top: 18px; }
+      .results-head {
+        display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line);
+      }
+      .results-title { font-size: 15px; font-weight: 800; }
+      .results-title strong { color: var(--purple); }
+      .page-size { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #778093; font-weight: 700; }
+      .page-size-box { min-width: 58px; height: 40px; border: 1px solid #dfe4ef; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+      .req-table thead th {
+        background: #fafbff; color: #677286; font-size: 12px; font-weight: 800; padding: 12px 12px;
+      }
+      .req-table tbody td { padding: 14px 12px; font-size: 13px; }
+      .link { color: var(--purple); text-decoration: none; font-weight: 800; }
+      .status-pill {
+        display: inline-flex; align-items: center; justify-content: center; min-width: 58px; height: 30px; padding: 0 12px; border-radius: 999px; background: #eceef4; color: #2f3748; font-size: 12px; font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span>Soomgo</span>
+        <svg width="35" height="20" viewBox="0 0 35 20" fill="none" aria-hidden="true">
+          <circle cx="11" cy="5" r="4.2" fill="white" opacity="0.95" />
+          <path d="M3 18c0-3.6 3.6-6.5 8-6.5s8 2.9 8 6.5" fill="white" opacity="0.95" />
+          <circle cx="26" cy="6" r="3.2" fill="white" opacity="0.9" />
+          <path d="M20 18c0-2.9 2.8-5.2 6.3-5.2 3.5 0 6.4 2.3 6.4 5.2" fill="white" opacity="0.9" />
+        </svg>
+      </div>
+      <div class="top-icons">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="white" stroke-width="2.1" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 7h10v10M19 5l-8 8M5 19l4-4" stroke="white" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="profile">
+          <div class="team">Product 팀</div>
+          <div class="name">Shayne Kim</div>
+          <div class="email">shayne@soomgo.com</div>
+          <div class="role">Manager</div>
+        </div>
+        <div class="menu">
+          <div class="menu-row">대시보드</div>
+          <div class="menu-row active">회원관리</div>
+          <div class="submenu">
+            <a class="active" href="#">회원조회</a>
+            <a href="#">고수조회</a>
+            <a href="#">이용제한 관리</a>
+            <a href="#">포트폴리오 조회</a>
+            <a href="#">전문컨설업 자격 조회</a>
+            <a href="#">사업자 검증</a>
+            <a href="#">리뷰 관리</a>
+            <a href="#">신고 관리</a>
+            <a href="#">프로필 이미지 검수</a>
+            <a href="#">안심번호 관리</a>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="breadcrumb">대시보드 / 회원관리 / 회원조회</div>
+        <div class="header">
+          <h1 class="title" id="memberName">김세연</h1>
+          <div class="actions">
+            <button class="btn primary">회원 계정 접속</button>
+            <button class="btn neutral">밴 처리</button>
+            <button class="btn gray">밴 해제</button>
+            <button class="btn primary">캐시 지급</button>
+            <button class="btn primary">캐시 차감</button>
+            <button class="btn orange">임시 비밀번호 생성</button>
+            <button class="btn green">프로필 이동 →</button>
+            <button class="btn green">SGF1 이동 →</button>
+          </div>
+        </div>
+
+        <div class="layout">
+          <section class="card">
+            <div class="card-title">회원정보</div>
+            <table class="info-table">
+              <tbody>
+                <tr><th>회원번호</th><td id="memberId">9664229</td></tr>
+                <tr><th>숨고 활동명</th><td>김세연 <button class="inline-btn">변경</button></td></tr>
+                <tr><th>이름</th><td id="memberNameCell">김세연</td></tr>
+                <tr><th>회원유형</th><td>고수</td></tr>
+                <tr><th>계정상태</th><td></td></tr>
+                <tr><th>프로필 경고 횟수</th><td>0 <button class="inline-btn">변경</button></td></tr>
+                <tr><th>회원 활성화 상태</th><td>활성화</td></tr>
+                <tr><th>이메일</th><td id="memberEmail">shayne+11@soomgo.com</td></tr>
+                <tr><th>가입 경로</th><td></td></tr>
+                <tr><th>휴대폰 본인인증</th><td>인증완료 <button class="inline-btn">인증현황</button></td></tr>
+                <tr><th>전화번호</th><td>01047945186</td></tr>
+                <tr><th>디바이스</th><td>iPad Pro 12.9-inch (3rd generation) (ios)</td></tr>
+                <tr><th>최근 접속일</th><td>2026-04-02 14:53:28</td></tr>
+                <tr><th>가입일</th><td>2023-01-12 10:00:20</td></tr>
+                <tr><th>테스트 계정 여부</th><td><span class="checkbox">✓</span></td></tr>
+                <tr><th>가상계좌 설정 여부</th><td><span class="checkbox">✓</span></td></tr>
+                <tr><th>법인계정 여부</th><td><span class="empty-checkbox"></span></td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section>
+            <div class="tabs">
+              <div class="tab active">요청관리</div>
+              <div class="tab">캐시관리</div>
+              <div class="tab">견적관리</div>
+              <div class="tab">프로필조회</div>
+              <div class="tab">정산정보관리</div>
+              <div class="tab">검수이력</div>
+              <div class="tab">문자발송</div>
+              <div class="tab">상담이력</div>
+              <div class="tab">밴처리이력</div>
+              <div class="tab">본인인증이력</div>
+              <div class="tab">신고내역</div>
+              <div class="tab">커뮤니티신고</div>
+              <div class="tab">수동매칭</div>
+              <div class="tab">매출자료다운로드</div>
+              <div class="tab">광고</div>
+            </div>
+
+            <div class="subtabs-box">
+              <div class="subtabs">
+                <div class="subtab active">받은요청</div>
+                <div class="subtab">보낸요청</div>
+                <div class="subtab">요청자 채팅</div>
+              </div>
+            </div>
+
+            <div class="search-area">
+              <div class="form-grid">
+                <div class="field">
+                  <label class="label">요청 번호</label>
+                  <input class="input" />
+                </div>
+                <div class="field">
+                  <label class="label">서비스명</label>
+                  <input class="input under" value="서비스명 입력" />
+                  <svg class="icon-right" viewBox="0 0 20 20" fill="none"><path d="M5 7l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="field">
+                  <label class="label">요청일자</label>
+                  <input class="input under" value="2026-04-03" />
+                  <svg class="icon-right" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="1.8" stroke="currentColor" stroke-width="1.7"/><path d="M6 2.8v3M14 2.8v3M3 8h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </div>
+                <div class="field">
+                  <label class="label">&nbsp;</label>
+                  <input class="input under" value="2026-04-03" />
+                  <svg class="icon-right" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="1.8" stroke="currentColor" stroke-width="1.7"/><path d="M6 2.8v3M14 2.8v3M3 8h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </div>
+                <div class="field">
+                  <label class="label">요청자 ID</label>
+                  <input class="input" />
+                </div>
+                <div class="field">
+                  <label class="label">요청자 이름</label>
+                  <input class="input" />
+                </div>
+                <div class="field">
+                  <label class="label">요청자 이메일</label>
+                  <input class="input" />
+                </div>
+                <div class="field">
+                  <label class="label">요청자 연락처</label>
+                  <input class="input" />
+                </div>
+              </div>
+              <div class="actions-row">
+                <button class="ghost-btn" type="button">초기화</button>
+                <button class="search-btn" type="button">검색</button>
+              </div>
+            </div>
+
+            <div class="card results-card">
+              <div class="results-head">
+                <div class="results-title">총 <strong>1개</strong> 받은 요청</div>
+                <div class="page-size">
+                  <span>페이지당 크기</span>
+                  <span class="page-size-box">10</span>
+                </div>
+              </div>
+              <table class="req-table">
+                <thead>
+                  <tr>
+                    <th>요청번호</th>
+                    <th>서비스</th>
+                    <th>필요캐시</th>
+                    <th>요청자 ID</th>
+                    <th>요청자 이름</th>
+                    <th>요청자 이메일</th>
+                    <th>요청자 연락처</th>
+                    <th>상태</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="link" href="#">69cf2bb4397c17eff6760957</a></td>
+                    <td>영어 과외</td>
+                    <td>2390</td>
+                    <td><a class="link" href="#">5266852</a></td>
+                    <td>용프로골프아카데미원장 이용희프로입니다</td>
+                    <td>golf1985@hanmail.net</td>
+                    <td>01054786658</td>
+                    <td><span class="status-pill">opened</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const user = params.get("user");
+      const map = {
+        "1867793": { name: "김세연", email: "kimseyeon@soomgo.com" },
+        "2045812": { name: "이준호", email: "leejunho@soomgo.com" },
+        "3198274": { name: "박지영", email: "parkjiyoung@soomgo.com" },
+        "4302156": { name: "최민준", email: "choiminjun@soomgo.com" },
+        "5417839": { name: "정수빈", email: "jeongsubin@soomgo.com" }
+      };
+      const current = map[user] || { name: "김세연", email: "shayne+11@soomgo.com" };
+      if (user) {
+        document.getElementById("memberId").textContent = user;
+      }
+      document.getElementById("memberName").textContent = current.name;
+      document.getElementById("memberNameCell").textContent = current.name;
+      document.getElementById("memberEmail").textContent = current.email;
+    </script>
+  </body>
+</html>
