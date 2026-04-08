@@ -881,7 +881,7 @@
       .history-head,
       .history-row {
         display: grid;
-        grid-template-columns: 150px 118px minmax(0, 1fr) 120px;
+        grid-template-columns: 150px 118px minmax(0, 1fr) 120px 190px;
         gap: 12px;
         align-items: center;
       }
@@ -926,6 +926,13 @@
         align-items: center;
       }
 
+      .history-reason {
+        color: #5a6478;
+        font-size: 12px;
+        font-weight: 700;
+        word-break: keep-all;
+      }
+
       .history-yn {
         min-width: 34px;
         height: 26px;
@@ -946,6 +953,96 @@
       .history-yn.n {
         background: #f1f2f5;
         color: #738096;
+      }
+
+      .reason-form {
+        display: grid;
+        gap: 12px;
+      }
+
+      .reason-note {
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #f8f9fd;
+        color: #5c667a;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .reason-options {
+        display: grid;
+        gap: 10px;
+      }
+
+      .reason-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border: 1px solid #e3e7f0;
+        border-radius: 12px;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .reason-option input {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--primary);
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      .reason-option span {
+        font-size: 14px;
+        font-weight: 700;
+        color: #2f3748;
+      }
+
+      .reason-textarea-wrap {
+        display: none;
+      }
+
+      .reason-textarea-wrap.open {
+        display: block;
+      }
+
+      .reason-textarea {
+        width: 100%;
+        min-height: 110px;
+        padding: 12px 14px;
+        border: 1px solid #d8deea;
+        border-radius: 12px;
+        resize: vertical;
+        font: 14px "Noto Sans KR", sans-serif;
+        color: #313849;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .modal-btn {
+        min-width: 92px;
+        height: 40px;
+        padding: 0 16px;
+        border-radius: 10px;
+        font: 700 14px "Noto Sans KR", sans-serif;
+      }
+
+      .modal-btn.secondary {
+        border: 1px solid #d7dceb;
+        background: #fff;
+        color: #5d6679;
+      }
+
+      .modal-btn.primary {
+        border: 0;
+        background: var(--primary);
+        color: #fff;
       }
 
       .event-badge {
@@ -1322,7 +1419,7 @@
                       <td><span class="status-pill y">Y</span></td>
                       <td><span class="status-pill n">N</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001001" data-user-id="1867793" data-user-name="김세연">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001001" data-user-id="1867793" data-user-name="김세연">고용 취소</button></div></td>
                     </tr>
                     <tr>
                       <td><a class="chat-id" href="chat-detail-admin.html?chat=9001002">9001002</a></td>
@@ -1333,7 +1430,7 @@
                       <td><span class="status-pill n">N</span></td>
                       <td><span class="status-pill n">N</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001002" data-user-id="1867793" data-user-name="김세연">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001002" data-user-id="1867793" data-user-name="김세연">고용 취소</button></div></td>
                     </tr>
                     <tr>
                       <td><a class="chat-id" href="chat-detail-admin.html?chat=9001003">9001003</a></td>
@@ -1344,7 +1441,7 @@
                       <td><span class="status-pill n">N</span></td>
                       <td><span class="status-pill y">Y</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001003" data-user-id="2045812" data-user-name="이준호">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001003" data-user-id="2045812" data-user-name="이준호">고용 취소</button></div></td>
                     </tr>
                     <tr>
                       <td><a class="chat-id" href="chat-detail-admin.html?chat=9001004">9001004</a></td>
@@ -1355,7 +1452,7 @@
                       <td><span class="status-pill n">N</span></td>
                       <td><span class="status-pill n">N</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001004" data-user-id="2045812" data-user-name="이준호">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001004" data-user-id="2045812" data-user-name="이준호">고용 취소</button></div></td>
                     </tr>
                     <tr>
                       <td><a class="chat-id" href="chat-detail-admin.html?chat=9001005">9001005</a></td>
@@ -1366,7 +1463,7 @@
                       <td><span class="status-pill y">Y</span></td>
                       <td><span class="status-pill n">N</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001005" data-user-id="3198274" data-user-name="박지영">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001005" data-user-id="3198274" data-user-name="박지영">고용 취소</button></div></td>
                     </tr>
                     <tr>
                       <td><a class="chat-id" href="chat-detail-admin.html?chat=9001006">9001006</a></td>
@@ -1377,7 +1474,7 @@
                       <td><span class="status-pill n">N</span></td>
                       <td><span class="status-pill n">N</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001006" data-user-id="3198274" data-user-name="박지영">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001006" data-user-id="3198274" data-user-name="박지영">고용 취소</button></div></td>
                     </tr>
                     <tr>
                       <td><a class="chat-id" href="chat-detail-admin.html?chat=9001007">9001007</a></td>
@@ -1388,7 +1485,7 @@
                       <td><span class="status-pill n">N</span></td>
                       <td><span class="status-pill y">Y</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001007" data-user-id="4302156" data-user-name="최민준">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001007" data-user-id="4302156" data-user-name="최민준">고용 취소</button></div></td>
                     </tr>
                     <tr>
                       <td><a class="chat-id" href="chat-detail-admin.html?chat=9001008">9001008</a></td>
@@ -1399,7 +1496,7 @@
                       <td><span class="status-pill n">N</span></td>
                       <td><span class="status-pill n">N</span></td>
                       <td><button class="history-btn" type="button" data-chat-id="9001008" data-user-id="5417839" data-user-name="정수빈">history</button></td>
-                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button">고용 취소</button></div></td>
+                      <td><div class="row-actions"><button class="action-btn confirm" type="button">고용 확정</button><button class="action-btn cancel" type="button" data-chat-id="9001008" data-user-id="5417839" data-user-name="정수빈">고용 취소</button></div></td>
                     </tr>
                   </tbody>
                 </table>
@@ -1438,40 +1535,53 @@
                 <div>유형</div>
                 <div>상태</div>
                 <div>고용 확정 여부</div>
+                <div>고용 취소 사유(어드민)</div>
               </div>
-              <div class="history-row">
-                <div class="history-time">26.3.31(화) 13:09</div>
-                <div class="history-type"><span class="event-badge review">인터렉 리뷰</span></div>
-                <div class="history-text">리뷰 작성 완료</div>
-                <div class="history-confirm"><span class="history-yn y">Y</span></div>
-              </div>
-              <div class="history-row">
-                <div class="history-time">26.3.26(목) 13:09</div>
-                <div class="history-type"><span class="event-badge hire">고용 flow</span></div>
-                <div class="history-text">고용 취소</div>
-                <div class="history-confirm"><span class="history-yn n">N</span></div>
-              </div>
-              <div class="history-row">
-                <div class="history-time">26.3.26(목) 12:09</div>
-                <div class="history-type"><span class="event-badge hire">고용 flow</span></div>
-                <div class="history-text">고용 확정</div>
-                <div class="history-confirm"><span class="history-yn y">Y</span></div>
-              </div>
-              <div class="history-row">
-                <div class="history-time">26.3.26(목) 11:11</div>
-                <div class="history-type"><span class="event-badge payment">숨고페이</span></div>
-                <div class="history-text">결제 취소 요청</div>
-                <div class="history-confirm"><span class="history-yn n">N</span></div>
-              </div>
-              <div class="history-row">
-                <div class="history-time">26.3.26(목) 11:09</div>
-                <div class="history-type"><span class="event-badge payment">숨고페이</span></div>
-                <div class="history-text">결제 완료</div>
-                <div class="history-confirm"><span class="history-yn y">Y</span></div>
-              </div>
+              <div id="historyRows"></div>
             </div>
           </div>
 
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop" id="cancelReasonModalBackdrop">
+      <div class="history-modal" role="dialog" aria-modal="true" aria-labelledby="cancelReasonModalTitle">
+        <div class="modal-head">
+          <div>
+            <div class="modal-title" id="cancelReasonModalTitle">고용 취소 사유</div>
+            <div class="modal-meta" id="cancelReasonModalMeta">채팅방 ID 9001001 · 고객 User ID 1867793 · 김세연</div>
+          </div>
+          <button class="modal-close" id="cancelReasonModalClose" type="button" aria-label="닫기">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="reason-form">
+            <div class="reason-note">고용 취소 사유를 선택해 주세요. `기타 직접 입력` 선택 시 상세 사유를 입력할 수 있습니다.</div>
+            <div class="reason-options">
+              <label class="reason-option">
+                <input type="radio" name="cancelReason" value="어뷰징(고용/리뷰)" checked />
+                <span>어뷰징(고용/리뷰)</span>
+              </label>
+              <label class="reason-option">
+                <input type="radio" name="cancelReason" value="리뷰 신고" />
+                <span>리뷰 신고</span>
+              </label>
+              <label class="reason-option">
+                <input type="radio" name="cancelReason" value="실제 거래 없음" />
+                <span>실제 거래 없음</span>
+              </label>
+              <label class="reason-option">
+                <input type="radio" name="cancelReason" value="기타 직접 입력" id="cancelReasonEtc" />
+                <span>기타 직접 입력</span>
+              </label>
+            </div>
+            <div class="reason-textarea-wrap" id="cancelReasonTextareaWrap">
+              <textarea class="reason-textarea" id="cancelReasonTextarea" placeholder="고용 취소 사유를 직접 입력해 주세요."></textarea>
+            </div>
+            <div class="modal-actions">
+              <button class="modal-btn secondary" id="cancelReasonDismiss" type="button">닫기</button>
+              <button class="modal-btn primary" id="cancelReasonSubmit" type="button">확인</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1486,7 +1596,53 @@
       const historyModalBackdrop = document.getElementById("historyModalBackdrop");
       const historyModalClose = document.getElementById("historyModalClose");
       const historyModalMeta = document.getElementById("historyModalMeta");
+      const historyRows = document.getElementById("historyRows");
       const historyButtons = document.querySelectorAll(".history-btn");
+      const cancelButtons = document.querySelectorAll(".action-btn.cancel");
+      const cancelReasonModalBackdrop = document.getElementById("cancelReasonModalBackdrop");
+      const cancelReasonModalClose = document.getElementById("cancelReasonModalClose");
+      const cancelReasonDismiss = document.getElementById("cancelReasonDismiss");
+      const cancelReasonSubmit = document.getElementById("cancelReasonSubmit");
+      const cancelReasonModalMeta = document.getElementById("cancelReasonModalMeta");
+      const cancelReasonEtc = document.getElementById("cancelReasonEtc");
+      const cancelReasonTextareaWrap = document.getElementById("cancelReasonTextareaWrap");
+      const cancelReasonTextarea = document.getElementById("cancelReasonTextarea");
+      const cancelReasonInputs = document.querySelectorAll('input[name="cancelReason"]');
+      let activeCancelContext = null;
+
+      const historyTemplates = {
+        default: [
+          { time: "26.3.31(화) 13:09", typeClass: "review", typeLabel: "인터렉 리뷰", status: "리뷰 작성 완료", confirmed: "Y", adminReason: "-" },
+          { time: "26.3.26(목) 13:09", typeClass: "hire", typeLabel: "고용 flow", status: "고용 취소", confirmed: "N", adminReason: "-" },
+          { time: "26.3.26(목) 12:09", typeClass: "hire", typeLabel: "고용 flow", status: "고용 확정", confirmed: "Y", adminReason: "-" },
+          { time: "26.3.26(목) 11:11", typeClass: "payment", typeLabel: "숨고페이", status: "결제 취소 요청", confirmed: "N", adminReason: "-" },
+          { time: "26.3.26(목) 11:09", typeClass: "payment", typeLabel: "숨고페이", status: "결제 완료", confirmed: "Y", adminReason: "-" }
+        ]
+      };
+
+      const cancelReasonByChatId = {};
+
+      const renderHistoryRows = (chatId) => {
+        const items = historyTemplates[chatId] || historyTemplates.default;
+        const savedReason = cancelReasonByChatId[chatId] || "-";
+
+        historyRows.innerHTML = items
+          .map((item) => {
+            const reason = item.status === "고용 취소" ? savedReason : "-";
+            const ynClass = item.confirmed === "Y" ? "y" : "n";
+
+            return `
+              <div class="history-row">
+                <div class="history-time">${item.time}</div>
+                <div class="history-type"><span class="event-badge ${item.typeClass}">${item.typeLabel}</span></div>
+                <div class="history-text">${item.status}</div>
+                <div class="history-confirm"><span class="history-yn ${ynClass}">${item.confirmed}</span></div>
+                <div class="history-reason">${reason}</div>
+              </div>
+            `;
+          })
+          .join("");
+      };
 
       hireStatusButton.addEventListener("click", () => {
         const isOpen = hireStatusDropdown.classList.toggle("open");
@@ -1515,6 +1671,7 @@
         button.addEventListener("click", () => {
           const { chatId, userId, userName } = button.dataset;
           historyModalMeta.textContent = `채팅방 ID ${chatId} · 고객 User ID ${userId} · ${userName}`;
+          renderHistoryRows(chatId);
           historyModalBackdrop.classList.add("open");
         });
       });
@@ -1529,11 +1686,63 @@
         }
       });
 
+      const syncCancelReasonEtc = () => {
+        const shouldOpen = cancelReasonEtc.checked;
+        cancelReasonTextareaWrap.classList.toggle("open", shouldOpen);
+        if (!shouldOpen) {
+          cancelReasonTextarea.value = "";
+        }
+      };
+
+      cancelReasonInputs.forEach((input) => {
+        input.addEventListener("change", syncCancelReasonEtc);
+      });
+
+      cancelButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const { chatId, userId, userName } = button.dataset;
+          activeCancelContext = { chatId, userId, userName };
+          cancelReasonModalMeta.textContent = `채팅방 ID ${chatId} · 고객 User ID ${userId} · ${userName}`;
+          cancelReasonModalBackdrop.classList.add("open");
+          cancelReasonInputs[0].checked = true;
+          syncCancelReasonEtc();
+        });
+      });
+
+      const closeCancelReasonModal = () => {
+        cancelReasonModalBackdrop.classList.remove("open");
+        cancelReasonInputs[0].checked = true;
+        syncCancelReasonEtc();
+      };
+
+      cancelReasonModalClose.addEventListener("click", closeCancelReasonModal);
+      cancelReasonDismiss.addEventListener("click", closeCancelReasonModal);
+      cancelReasonSubmit.addEventListener("click", () => {
+        if (activeCancelContext) {
+          const selectedReason = document.querySelector('input[name="cancelReason"]:checked')?.value || "-";
+          const finalReason =
+            selectedReason === "기타 직접 입력"
+              ? cancelReasonTextarea.value.trim() || "기타 직접 입력"
+              : selectedReason;
+
+          cancelReasonByChatId[activeCancelContext.chatId] = finalReason;
+        }
+
+        closeCancelReasonModal();
+      });
+
+      cancelReasonModalBackdrop.addEventListener("click", (event) => {
+        if (event.target === cancelReasonModalBackdrop) {
+          closeCancelReasonModal();
+        }
+      });
+
       window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
           hireStatusDropdown.classList.remove("open");
           hireStatusButton.setAttribute("aria-expanded", "false");
           historyModalBackdrop.classList.remove("open");
+          closeCancelReasonModal();
         }
       });
 
@@ -1543,6 +1752,8 @@
           hireStatusButton.setAttribute("aria-expanded", "false");
         }
       });
+
+      renderHistoryRows("9001001");
     </script>
   </body>
 </html>
