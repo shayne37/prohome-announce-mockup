@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>받은요청 - 숨고</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: #F5F5F5;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+    .gnb {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; padding: 0 16px;
+      border-bottom: 1px solid #EBEBEB;
+    }
+    .gnb-left { display: flex; align-items: center; gap: 12px; }
+    .gnb-hamburger { width: 24px; height: 24px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+    .gnb-hamburger span { display: block; width: 20px; height: 1.7px; background: #2D2D2D; border-radius: 2px; }
+    .gnb-logo { font-size: 22px; font-weight: 900; color: #6C38FF; letter-spacing: -0.5px; text-decoration: none; }
+    .gnb-right { display: flex; align-items: center; gap: 8px; }
+    .gnb-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg,#FFD93D,#FF6B6B); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
+    .gnb-bell { position: relative; cursor: pointer; }
+    .gnb-bell svg { width: 24px; height: 24px; display: block; }
+    .gnb-bell .bell-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; border-radius: 50%; background: #FF3B30; border: 1.5px solid #fff; }
+    .page { padding-bottom: 40px; }
+    .page-heading { padding: 20px 16px 12px; font-size: 20px; font-weight: 700; color: #1A1A1A; }
+    .arrow-icon { color: #BBBBBB; font-size: 18px; line-height: 1; }
+    .ad-banner { margin: 0 16px 16px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .ad-banner-left { display: flex; align-items: center; gap: 10px; }
+    .ad-soomgo-icon { width: 32px; height: 32px; border-radius: 8px; background: #6C38FF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #fff; }
+    .ad-text { font-size: 15px; color: #1A1A1A; }
+    .ad-text em { color: #6C38FF; font-weight: 700; font-style: normal; }
+    .tab-bar { background: #fff; display: flex; border-bottom: 1px solid #EBEBEB; position: sticky; top: 56px; z-index: 90; }
+    .tab-item { flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: none; position: relative; border-bottom: 2.5px solid transparent; font-size: 15px; color: #AAAAAA; font-weight: 400; transition: all .15s; font-family: inherit; }
+    .tab-item.active { color: #6C38FF; font-weight: 700; border-bottom-color: #6C38FF; }
+    .tab-label { position: relative; display: inline-block; }
+    .red-dot { position: absolute; top: -2px; right: -9px; width: 6px; height: 6px; border-radius: 50%; background: #FF3B30; }
+    .filter-bar { background: #F5F5F5; padding: 12px 16px; display: flex; gap: 8px; position: relative; }
+    .filter-group { position: relative; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; height: 36px; padding: 0 14px; border-radius: 100px; border: 1px solid #DDDDDD; background: #fff; font-size: 14px; font-weight: 500; color: #444; white-space: nowrap; cursor: pointer; font-family: inherit; }
+    .chip.active { border-color: #6C38FF; background: #F0EBFF; color: #6C38FF; }
+    .chip-caret { font-size: 10px; color: #888; }
+    .filter-menu { position: absolute; top: 44px; left: 0; z-index: 80; min-width: 172px; padding: 8px 0; border: 1px solid #E5E5E5; border-radius: 12px; background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+    .filter-option { width: 100%; min-height: 40px; padding: 10px 14px; border: 0; background: #fff; color: #333; font-size: 14px; font-family: inherit; text-align: left; cursor: pointer; white-space: nowrap; }
+    .filter-option:hover { background: #F7F5FF; }
+    .filter-option.selected { color: #6C38FF; font-weight: 700; }
+    .request-list { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
+    .request-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+    .card-body { padding: 16px 16px 0; }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .card-meta-left { display: flex; align-items: center; gap: 8px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: #EEE; }
+    .card-user-name { font-size: 14px; font-weight: 500; color: #444; }
+    .card-user-sub { font-size: 13px; color: #888; }
+    .card-user-sub em { color: #6C38FF; font-weight: 600; font-style: normal; }
+    .card-time { font-size: 13px; color: #AAAAAA; }
+    .card-content { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+    .card-text { flex: 1; }
+    .card-category { font-size: 13px; color: #888; margin-bottom: 4px; }
+    .card-title-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .card-title { font-size: 17px; font-weight: 700; color: #1A1A1A; }
+    .card-desc { font-size: 14px; color: #666; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-thumbnail { width: 72px; height: 72px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+    .card-actions { display: flex; border-top: 1px solid #F0F0F0; margin-top: 4px; }
+    .card-btn { flex: 1; height: 48px; border: none; background: none; font-size: 14px; font-weight: 500; cursor: pointer; color: #888; transition: background .1s; font-family: inherit; }
+    .card-btn:hover { background: #F8F8F8; }
+    .card-btn.primary { color: #6C38FF; font-weight: 600; }
+    .card-divider { width: 1px; background: #F0F0F0; }
+    .cash-banner { margin: 0; background: linear-gradient(135deg,#EDE9FF 0%,#D8CCFF 100%); border-radius: 16px; padding: 18px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .cash-banner-sub { font-size: 13px; color: #6C38FF; margin-bottom: 4px; }
+    .cash-banner-sub strong { font-size: 15px; font-weight: 800; }
+    .cash-banner-title { font-size: 17px; font-weight: 800; color: #1A1A1A; }
+    .cash-icon { width: 56px; height: 56px; background: #6C38FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center; }
+    .filter-empty { display: none; margin: 0 16px; background: #fff; border-radius: 16px; }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-title { font-size: 17px; font-weight: 700; color: #1A1A1A; margin-bottom: 8px; }
+    .empty-desc { font-size: 14px; color: #888; line-height: 1.6; }
+    .empty-action { margin-top: 20px; height: 44px; padding: 0 18px; border: 0; border-radius: 8px; background: #6C38FF; color: #fff; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .empty-action.secondary { border: 1px solid #DDDDDD; background: #fff; color: #333; }
+    .new-dot { width: 7px; height: 7px; border-radius: 50%; background: #FF3B30; display: inline-block; flex-shrink: 0; }
+    .booking-subtabs { display: flex; height: 52px; background: #fff; border-bottom: 1px solid #E7EAF0; }
+    .booking-subtab { flex: 1; border: 0; border-bottom: 2px solid transparent; background: #fff; color: #A0A8B3; font-size: 15px; font-weight: 700; font-family: inherit; }
+    .booking-subtab.active { border-bottom-color: #1F2937; color: #1F2937; }
+    .booking-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 16px; color: #1F2937; font-size: 15px; font-weight: 700; }
+    .booking-sort { border: 0; background: none; color: #667085; font-size: 14px; font-family: inherit; cursor: pointer; }
+    .booking-list { padding: 0 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .booking-card { background: #fff; border-radius: 16px; padding: 20px; }
+    .booking-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: #98A2B3; font-size: 14px; }
+    .booking-category { color: #667085; }
+    .booking-date { margin-bottom: 10px; color: #111827; font-size: 21px; line-height: 1.35; font-weight: 800; }
+    .booking-location { margin-bottom: 18px; color: #344054; font-size: 14px; }
+    .booking-detail-grid { display: grid; grid-template-columns: 78px 1fr; row-gap: 10px; margin-bottom: 18px; font-size: 15px; }
+    .booking-detail-label { color: #7A8699; }
+    .booking-detail-value { color: #1F2937; font-weight: 500; }
+    .booking-payment { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 14px 16px; border-radius: 10px; background: #F5F6F8; }
+    .booking-payment-label { color: #7A8699; font-size: 13px; }
+    .booking-payment-price { color: #111827; font-size: 17px; font-weight: 800; }
+    .booking-actions { display: grid; grid-template-columns: 1fr 1.95fr; gap: 8px; }
+    .booking-btn { height: 48px; border-radius: 8px; border: 1px solid #D9DEE7; background: #fff; color: #111827; font-size: 16px; font-weight: 700; font-family: inherit; }
+    .booking-btn.primary { border-color: #6638F0; background: #6638F0; color: #fff; }
+    .booking-btn.disabled { border-color: #E1E6ED; background: #E1E6ED; color: #A8B2C0; }
+    .booking-panel { display: none; }
+    .booking-panel.active { display: block; }
+    .booking-warning { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #263241; color: #fff; font-size: 14px; font-weight: 700; }
+    .booking-section-title { padding: 20px 16px 10px; color: #1F2937; font-size: 17px; font-weight: 800; }
+    .booking-status-badge { display: inline-flex; align-items: center; height: 24px; margin-bottom: 14px; padding: 0 8px; border: 1px solid #2F9BFF; border-radius: 6px; color: #2196F3; font-size: 12px; font-weight: 800; }
+    .booking-status-badge.progress { background: #EAF6FF; }
+    .booking-chat-btn { position: relative; height: 48px; border-radius: 8px; border: 1px solid #D9DEE7; background: #fff; color: #667085; font-size: 20px; font-family: inherit; }
+    .booking-chat-btn::after { content: ''; position: absolute; top: 9px; right: 10px; width: 6px; height: 6px; border-radius: 50%; background: #FF3B30; }
+    .bottom-sheet-overlay { position: fixed; inset: 0; z-index: 200; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.36); }
+    .bottom-sheet-overlay.open { display: flex; }
+    .bottom-sheet { width: 100%; max-width: 480px; min-height: 280px; border-radius: 18px 18px 0 0; background: #fff; overflow: hidden; }
+    .bottom-sheet-handle { width: 44px; height: 4px; margin: 16px auto 10px; border-radius: 100px; background: #C8CDD3; }
+    .bottom-sheet-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 20px 20px; border-bottom: 1px solid #ECEFF3; }
+    .bottom-sheet-title { color: #111827; font-size: 20px; font-weight: 800; }
+    .bottom-sheet-close { width: 32px; height: 32px; border: 0; background: none; color: #111827; font-size: 30px; line-height: 1; cursor: pointer; }
+    .sort-option { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 56px; padding: 0 20px; border: 0; background: #fff; color: #111827; font-size: 16px; font-weight: 700; font-family: inherit; text-align: left; cursor: pointer; }
+    .sort-check { color: #6638F0; font-size: 24px; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+<header class="gnb">
+  <div class="gnb-left">
+    <div class="gnb-hamburger"><span></span><span></span><span></span></div>
+    <a class="gnb-logo" href="#">숨고</a>
+  </div>
+  <div class="gnb-right">
+    <div class="gnb-avatar">C</div>
+    <div class="gnb-bell">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#2D2D2D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13.73 21a2 2 0 01-3.46 0" stroke="#2D2D2D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="bell-dot"></span>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <h2 class="page-heading">받은요청</h2>
+
+  <div class="ad-banner">
+    <div class="ad-banner-left">
+      <div class="ad-soomgo-icon">S</div>
+      <span class="ad-text">숨고플러스 광고 <em>입찰하기</em></span>
+    </div>
+    <span class="arrow-icon">›</span>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-item active" data-tab="estimate" onclick="switchTab('estimate')">
+      <span class="tab-label">견적비교(1:N)<span class="red-dot"></span></span>
+    </button>
+    <button class="tab-item" data-tab="instant" onclick="switchTab('instant')">
+      <span class="tab-label">바로예약</span>
+    </button>
+    <button class="tab-item" data-tab="urgent" onclick="switchTab('urgent')">
+      <span class="tab-label">긴급출동</span>
+    </button>
+  </div>
+
+  <div class="tab-content active" id="tab-estimate">
+    <div class="filter-bar">
+      <div class="filter-group">
+        <button class="chip" type="button" data-filter-button="service" onclick="toggleFilterMenu('service')">
+          <span data-filter-label="service">서비스</span>
+          <span class="chip-caret">▾</span>
+        </button>
+        <div class="filter-menu" data-filter-menu="service" hidden>
+          <button class="filter-option selected" type="button" data-filter-option="service" data-value="all" onclick="selectFilter('service', 'all', '서비스')">전체 서비스</button>
+          <button class="filter-option" type="button" data-filter-option="service" data-value="오토바이 튜닝" onclick="selectFilter('service', '오토바이 튜닝', '오토바이 튜닝')">오토바이 튜닝</button>
+          <button class="filter-option" type="button" data-filter-option="service" data-value="영어 과외" onclick="selectFilter('service', '영어 과외', '영어 과외')">영어 과외</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="chip" type="button" data-filter-button="readStatus" onclick="toggleFilterMenu('readStatus')">
+          <span data-filter-label="readStatus">읽음 상태</span>
+          <span class="chip-caret">▾</span>
+        </button>
+        <div class="filter-menu" data-filter-menu="readStatus" hidden>
+          <button class="filter-option selected" type="button" data-filter-option="readStatus" data-value="all" onclick="selectFilter('readStatus', 'all', '읽음 상태')">전체</button>
+          <button class="filter-option" type="button" data-filter-option="readStatus" data-value="unread" onclick="selectFilter('readStatus', 'unread', '안읽은 요청')">안읽은 요청</button>
+          <button class="filter-option" type="button" data-filter-option="readStatus" data-value="read" onclick="selectFilter('readStatus', 'read', '읽은 요청')">읽은 요청</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="chip" type="button" data-filter-button="requestType" onclick="toggleFilterMenu('requestType')">
+          <span data-filter-label="requestType">요청 유형</span>
+          <span class="chip-caret">▾</span>
+        </button>
+        <div class="filter-menu" data-filter-menu="requestType" hidden>
+          <button class="filter-option selected" type="button" data-filter-option="requestType" data-value="all" onclick="resetRequestTypeFilter()">전체</button>
+          <button class="filter-option" type="button" data-filter-option="requestType" data-value="soomgo-plus" data-label="숨고플러스" onclick="toggleRequestTypeFilter('soomgo-plus')">숨고플러스</button>
+          <button class="filter-option" type="button" data-filter-option="requestType" data-value="designated" data-label="지정요청" onclick="toggleRequestTypeFilter('designated')">지정요청</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="request-list">
+      <div class="request-card" data-service="오토바이 튜닝" data-read-status="read" data-request-type="general">
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-meta-left">
+              <img class="avatar" src="https://d2xc1tuir9mfs4.cloudfront.net/upload/profile/6deb8546-1eba-44b0-9194-4e9e7ea91584.jpg" alt="프로필"/>
+              <div>
+                <div class="card-user-name">0511mwe</div>
+                <div class="card-user-sub">견적 보낸 고수 <em>2명</em></div>
+              </div>
+            </div>
+            <span class="card-time">1일 전</span>
+          </div>
+          <div class="card-content">
+            <div class="card-text">
+              <div class="card-category">오토바이 튜닝</div>
+              <div class="card-title-row"><span class="card-title">날짜 협의 필요</span></div>
+              <div class="card-desc">핸들, 협의 가능해요, 서울, 강남구, 고수와 상담 시 논의할게요</div>
+            </div>
+            <img class="card-thumbnail" src="https://d2xc1tuir9mfs4.cloudfront.net/upload/request/3d339086-0ee7-4a62-ae3a-2d517f0b3a78.jpg?webp=1" alt="요청 이미지"/>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="card-btn">삭제하기</button>
+          <div class="card-divider"></div>
+          <button class="card-btn primary">자세히 보기</button>
+        </div>
+      </div>
+
+      <div class="cash-banner list-promo">
+        <div>
+          <div class="cash-banner-sub">숨고캐시 <strong>5%</strong> 할인</div>
+          <div class="cash-banner-title">할인받고 견적 더 많이 보내세요</div>
+        </div>
+        <div class="cash-icon">💰</div>
+      </div>
+
+      <div class="request-card" data-service="영어 과외" data-read-status="unread" data-request-type="designated">
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-meta-left">
+              <div class="avatar" style="display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;background:#2E7D32;">E</div>
+              <div>
+                <div class="card-user-name">0514eng</div>
+                <div class="card-user-sub">견적 보낸 고수 <em>0명</em></div>
+              </div>
+            </div>
+            <span class="card-time">방금 전</span>
+          </div>
+          <div class="card-content">
+            <div class="card-text">
+              <div class="card-category">영어 과외</div>
+              <div class="card-title-row"><span class="card-title">주 2회 수업 원해요</span><span class="new-dot"></span></div>
+              <div class="card-desc">중학생 영어 회화와 문법, 온라인 가능, 서울, 강남구, 평일 저녁 선호해요</div>
+            </div>
+            <div class="card-thumbnail" style="display:flex;align-items:center;justify-content:center;background:#E8F5E9;color:#2E7D32;font-size:26px;font-weight:800;">A</div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="card-btn">삭제하기</button>
+          <div class="card-divider"></div>
+          <button class="card-btn primary">자세히 보기</button>
+        </div>
+      </div>
+
+      <div class="request-card" data-service="오토바이 튜닝" data-read-status="unread" data-request-type="soomgo-plus designated">
+        <div class="card-body">
+          <div class="card-meta">
+            <div class="card-meta-left">
+              <img class="avatar" src="https://d2xc1tuir9mfs4.cloudfront.net/upload/profile/68ff25d7-029e-4375-83d8-b7a06fdad23a.jpg" alt="프로필"/>
+              <div>
+                <div class="card-user-name">0511ios</div>
+                <div class="card-user-sub">견적 보낸 고수 <em>1명</em></div>
+              </div>
+            </div>
+            <span class="card-time">1일 전</span>
+          </div>
+          <div class="card-content">
+            <div class="card-text">
+              <div class="card-category">오토바이 튜닝</div>
+              <div class="card-title-row"><span class="card-title">날짜 협의 필요</span><span class="new-dot"></span></div>
+              <div class="card-desc">핸들, 협의 가능해요, 서울, 강남구, 고수와 상담 시 논의할게요</div>
+            </div>
+            <img class="card-thumbnail" src="https://d2xc1tuir9mfs4.cloudfront.net/upload/request/044982be-783b-4852-aeaa-fe691d3aa212.jpg?webp=1" alt="요청 이미지"/>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="card-btn">삭제하기</button>
+          <div class="card-divider"></div>
+          <button class="card-btn primary">자세히 보기</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state filter-empty" id="filter-empty">
+      <div class="empty-title" id="filter-empty-title">조건에 맞는 요청이 없어요</div>
+      <div class="empty-desc" id="filter-empty-desc">다른 필터를 선택해 보세요</div>
+      <button class="empty-action secondary" id="filter-empty-action" type="button" onclick="resetAllFilters()">필터 초기화</button>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-instant">
+    <div class="booking-subtabs">
+      <button class="booking-subtab active" type="button" data-booking-tab="request" onclick="switchBookingTab('request')">예약 요청</button>
+      <button class="booking-subtab" type="button" data-booking-tab="upcoming" onclick="switchBookingTab('upcoming')">진행 예정</button>
+      <button class="booking-subtab" type="button" data-booking-tab="done" onclick="switchBookingTab('done')">완료 내역</button>
+    </div>
+    <div class="booking-panel active" id="booking-panel-request">
+      <div class="booking-toolbar">
+        <span>총 3건</span>
+        <button class="booking-sort" id="booking-sort-label" type="button" onclick="openSortSheet()">신규 요청순⌄</button>
+      </div>
+      <div class="booking-list">
+        <div class="booking-card">
+        <div class="booking-card-top">
+          <span class="booking-category">원룸/소형 이사</span>
+          <span>03.05 요청 ›</span>
+        </div>
+        <div class="booking-date">3월 20일(금)<br>오전 12시~오후 2시</div>
+        <div class="booking-location">⌖ 서울 강남구 역삼동</div>
+        <div class="booking-detail-grid">
+          <div class="booking-detail-label">시간 협의</div>
+          <div class="booking-detail-value">시간 협의 불가</div>
+          <div class="booking-detail-label">이사 종류</div>
+          <div class="booking-detail-value">포장이사</div>
+          <div class="booking-detail-label">이사 규모</div>
+          <div class="booking-detail-value">원룸(10평 이하)</div>
+        </div>
+        <div class="booking-payment">
+          <span class="booking-payment-label">예상 정산금</span>
+          <span class="booking-payment-price">80,000원</span>
+        </div>
+        <div class="booking-actions">
+          <button class="booking-btn" type="button">거절</button>
+          <button class="booking-btn primary" type="button">수락 (24시간 후 만료)</button>
+        </div>
+      </div>
+
+        <div class="booking-card">
+        <div class="booking-card-top">
+          <span class="booking-category">원룸/소형 이사</span>
+          <span>03.05 요청 ›</span>
+        </div>
+        <div class="booking-date">3월 20일(금)<br>오전 12시~오후 2시</div>
+        <div class="booking-location">⌖ 서울 강남구 역삼동</div>
+        <div class="booking-detail-grid">
+          <div class="booking-detail-label">이사 종류</div>
+          <div class="booking-detail-value">포장이사</div>
+          <div class="booking-detail-label">이사 규모</div>
+          <div class="booking-detail-value">원룸(10평 이하)</div>
+        </div>
+        <div class="booking-payment">
+          <span class="booking-payment-label">예상 정산금</span>
+          <span class="booking-payment-price">80,000원</span>
+        </div>
+        <div class="booking-actions">
+          <button class="booking-btn" type="button">거절</button>
+          <button class="booking-btn primary" type="button">수락 (23시간 후 만료)</button>
+        </div>
+      </div>
+
+        <div class="booking-card">
+        <div class="booking-card-top">
+          <span class="booking-category">원룸/소형 이사</span>
+          <span>03.05 요청 ›</span>
+        </div>
+        <div class="booking-date">3월 20일(금)<br>오전 12시~오후 2시</div>
+        <div class="booking-location">⌖ 서울 강남구 역삼동</div>
+        <div class="booking-detail-grid">
+          <div class="booking-detail-label">이사 종류</div>
+          <div class="booking-detail-value">포장이사</div>
+          <div class="booking-detail-label">이사 규모</div>
+          <div class="booking-detail-value">원룸(10평 이하)</div>
+        </div>
+        <div class="booking-payment">
+          <span class="booking-payment-label">예상 정산금</span>
+          <span class="booking-payment-price">80,000원</span>
+        </div>
+        <div class="booking-actions">
+          <button class="booking-btn" type="button">거절</button>
+          <button class="booking-btn primary" type="button">수락 (곧 만료돼요)</button>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-panel" id="booking-panel-upcoming">
+      <div class="booking-warning">
+        <span>ⓘ 고객과 직거래 시 이용이 제한될 수 있어요</span>
+        <span>›</span>
+      </div>
+
+      <div class="booking-section-title">3월 20일(금)</div>
+      <div class="booking-list">
+        <div class="booking-card">
+          <div class="booking-status-badge">서비스 예정</div>
+          <div class="booking-card-top">
+            <span class="booking-category">원룸/소형 이사</span>
+            <span>03.05 요청 ›</span>
+          </div>
+          <div class="booking-date">3월 20일(금)<br>오전 12시~오후 2시</div>
+          <div class="booking-location">⌖ 서울 강남구 역삼동</div>
+          <div class="booking-detail-grid">
+            <div class="booking-detail-label">이사 종류</div>
+            <div class="booking-detail-value">포장이사</div>
+            <div class="booking-detail-label">이사 규모</div>
+            <div class="booking-detail-value">원룸(10평 이하)</div>
+          </div>
+          <div class="booking-payment">
+            <span class="booking-payment-label">예상 정산금</span>
+            <span class="booking-payment-price">80,000원</span>
+          </div>
+          <div class="booking-actions">
+            <button class="booking-chat-btn" type="button">☵</button>
+            <button class="booking-btn primary" type="button">서비스 시작</button>
+          </div>
+        </div>
+
+        <div class="booking-card">
+          <div class="booking-status-badge progress">서비스 진행중</div>
+          <div class="booking-card-top">
+            <span class="booking-category">원룸/소형 이사</span>
+            <span>03.05 요청 ›</span>
+          </div>
+          <div class="booking-date">3월 20일(금)<br>오전 12시~오후 2시</div>
+          <div class="booking-location">⌖ 서울 강남구 역삼동</div>
+          <div class="booking-detail-grid">
+            <div class="booking-detail-label">이사 종류</div>
+            <div class="booking-detail-value">포장이사</div>
+            <div class="booking-detail-label">이사 규모</div>
+            <div class="booking-detail-value">원룸(10평 이하)</div>
+          </div>
+          <div class="booking-payment">
+            <span class="booking-payment-label">예상 정산금</span>
+            <span class="booking-payment-price">80,000원</span>
+          </div>
+          <div class="booking-actions">
+            <button class="booking-chat-btn" type="button">☵</button>
+            <button class="booking-btn primary" type="button">서비스 완료</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="booking-section-title">3월 22일(일)</div>
+      <div class="booking-list">
+        <div class="booking-card">
+          <div class="booking-status-badge">서비스 예정</div>
+          <div class="booking-card-top">
+            <span class="booking-category">원룸/소형 이사</span>
+            <span>03.05 요청 ›</span>
+          </div>
+          <div class="booking-date">3월 22일(일)<br>오전 12시~오후 2시</div>
+          <div class="booking-location">⌖ 서울 강남구 역삼동</div>
+          <div class="booking-detail-grid">
+            <div class="booking-detail-label">이사 종류</div>
+            <div class="booking-detail-value">포장이사</div>
+            <div class="booking-detail-label">이사 규모</div>
+            <div class="booking-detail-value">원룸(10평 이하)</div>
+          </div>
+          <div class="booking-payment">
+            <span class="booking-payment-label">예상 정산금</span>
+            <span class="booking-payment-price">80,000원</span>
+          </div>
+          <div class="booking-actions">
+            <button class="booking-chat-btn" type="button">☵</button>
+            <button class="booking-btn disabled" type="button">서비스 시작 (3월 22일에 가능)</button>
+          </div>
+        </div>
+
+        <div class="booking-card">
+          <div class="booking-status-badge">서비스 예정</div>
+          <div class="booking-card-top">
+            <span class="booking-category">원룸/소형 이사</span>
+            <span>03.05 요청 ›</span>
+          </div>
+          <div class="booking-date">3월 22일(일)<br>오전 12시~오후 2시</div>
+          <div class="booking-location">⌖ 서울 강남구 역삼동</div>
+          <div class="booking-detail-grid">
+            <div class="booking-detail-label">이사 종류</div>
+            <div class="booking-detail-value">포장이사</div>
+            <div class="booking-detail-label">이사 규모</div>
+            <div class="booking-detail-value">원룸(10평 이하)</div>
+          </div>
+          <div class="booking-payment">
+            <span class="booking-payment-label">예상 정산금</span>
+            <span class="booking-payment-price">80,000원</span>
+          </div>
+          <div class="booking-actions">
+            <button class="booking-chat-btn" type="button">☵</button>
+            <button class="booking-btn disabled" type="button">서비스 시작 (3월 22일에 가능)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-panel" id="booking-panel-done">
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <div class="empty-title">완료 내역이 없어요</div>
+        <div class="empty-desc">완료된 바로예약 내역이 여기 표시돼요</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-urgent">
+    <div class="empty-state">
+      <div class="empty-icon">⚡</div>
+      <div class="empty-title">받은 긴급출동 요청이 없어요</div>
+      <div class="empty-desc">고객이 긴급출동 요청을 보내면<br>여기서 확인할 수 있어요</div>
+      <div class="empty-desc">(일감 확정 시 상세 기획 예정)</div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-sheet-overlay" id="sort-sheet" onclick="closeSortSheet()">
+  <div class="bottom-sheet" onclick="event.stopPropagation()">
+    <div class="bottom-sheet-handle"></div>
+    <div class="bottom-sheet-header">
+      <div class="bottom-sheet-title">정렬</div>
+      <button class="bottom-sheet-close" type="button" onclick="closeSortSheet()">×</button>
+    </div>
+    <button class="sort-option" type="button" data-sort-option="new" onclick="selectBookingSort('new')">
+      <span>신규 요청순</span>
+      <span class="sort-check">✓</span>
+    </button>
+    <button class="sort-option" type="button" data-sort-option="serviceDate" onclick="selectBookingSort('serviceDate')">
+      <span>서비스일 빠른순</span>
+      <span class="sort-check" hidden>✓</span>
+    </button>
+  </div>
+</div>
+
+<script>
+const selectedFilters = {
+  service: 'all',
+  readStatus: 'all',
+  requestTypes: []
+};
+const hasDesignatedRequestSetting = false;
+let selectedBookingSort = 'new';
+
+function switchTab(tabKey) {
+  document.querySelectorAll('.tab-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabKey);
+  });
+  document.querySelectorAll('.tab-content').forEach(el => {
+    el.classList.toggle('active', el.id === 'tab-' + tabKey);
+  });
+}
+
+function switchBookingTab(tabKey) {
+  document.querySelectorAll('.booking-subtab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.bookingTab === tabKey);
+  });
+  document.querySelectorAll('.booking-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === 'booking-panel-' + tabKey);
+  });
+}
+
+function openSortSheet() {
+  document.getElementById('sort-sheet').classList.add('open');
+}
+
+function closeSortSheet() {
+  document.getElementById('sort-sheet').classList.remove('open');
+}
+
+function selectBookingSort(sortKey) {
+  selectedBookingSort = sortKey;
+  const sortLabels = {
+    new: '신규 요청순',
+    serviceDate: '서비스일 빠른순'
+  };
+
+  document.getElementById('booking-sort-label').textContent = sortLabels[sortKey] + '⌄';
+  document.querySelectorAll('[data-sort-option]').forEach(option => {
+    option.querySelector('.sort-check').hidden = option.dataset.sortOption !== sortKey;
+  });
+  closeSortSheet();
+}
+
+function toggleFilterMenu(filterKey) {
+  document.querySelectorAll('[data-filter-menu]').forEach(menu => {
+    const isTarget = menu.dataset.filterMenu === filterKey;
+    menu.hidden = isTarget ? !menu.hidden : true;
+  });
+}
+
+function selectFilter(filterKey, value, label) {
+  selectedFilters[filterKey] = value;
+  document.querySelector(`[data-filter-label="${filterKey}"]`).textContent = label;
+  document.querySelector(`[data-filter-button="${filterKey}"]`).classList.toggle('active', value !== 'all');
+  document.querySelectorAll(`[data-filter-option="${filterKey}"]`).forEach(option => {
+    option.classList.toggle('selected', option.dataset.value === value);
+  });
+  document.querySelector(`[data-filter-menu="${filterKey}"]`).hidden = true;
+  applyEstimateFilters();
+}
+
+function resetAllFilters() {
+  selectedFilters.service = 'all';
+  selectedFilters.readStatus = 'all';
+  selectedFilters.requestTypes = [];
+
+  document.querySelector('[data-filter-label="service"]').textContent = '서비스';
+  document.querySelector('[data-filter-button="service"]').classList.remove('active');
+  document.querySelector('[data-filter-label="readStatus"]').textContent = '읽음 상태';
+  document.querySelector('[data-filter-button="readStatus"]').classList.remove('active');
+
+  document.querySelectorAll('[data-filter-option="service"]').forEach(option => {
+    option.classList.toggle('selected', option.dataset.value === 'all');
+  });
+  document.querySelectorAll('[data-filter-option="readStatus"]').forEach(option => {
+    option.classList.toggle('selected', option.dataset.value === 'all');
+  });
+  updateRequestTypeFilterUi();
+  applyEstimateFilters();
+}
+
+function resetRequestTypeFilter() {
+  selectedFilters.requestTypes = [];
+  updateRequestTypeFilterUi();
+  applyEstimateFilters();
+}
+
+function toggleRequestTypeFilter(value) {
+  const selected = selectedFilters.requestTypes;
+  selectedFilters.requestTypes = selected.includes(value)
+    ? selected.filter(item => item !== value)
+    : [...selected, value];
+  updateRequestTypeFilterUi();
+  applyEstimateFilters();
+}
+
+function updateRequestTypeFilterUi() {
+  const selected = selectedFilters.requestTypes;
+  const label = document.querySelector('[data-filter-label="requestType"]');
+  const button = document.querySelector('[data-filter-button="requestType"]');
+
+  if (selected.length === 0) {
+    label.textContent = '요청 유형';
+  } else if (selected.length === 1) {
+    const option = document.querySelector(`[data-filter-option="requestType"][data-value="${selected[0]}"]`);
+    label.textContent = option.dataset.label;
+  } else {
+    label.textContent = `요청 유형 ${selected.length}`;
+  }
+
+  button.classList.toggle('active', selected.length > 0);
+  document.querySelectorAll('[data-filter-option="requestType"]').forEach(option => {
+    const value = option.dataset.value;
+    option.classList.toggle('selected', value === 'all' ? selected.length === 0 : selected.includes(value));
+  });
+}
+
+function applyEstimateFilters() {
+  const cards = document.querySelectorAll('#tab-estimate .request-card');
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const matchesService = selectedFilters.service === 'all' || card.dataset.service === selectedFilters.service;
+    const matchesReadStatus = selectedFilters.readStatus === 'all' || card.dataset.readStatus === selectedFilters.readStatus;
+    const requestTypes = (card.dataset.requestType || '').split(' ');
+    const matchesRequestType = selectedFilters.requestTypes.length === 0
+      || selectedFilters.requestTypes.every(type => requestTypes.includes(type));
+    const isVisible = matchesService && matchesReadStatus && matchesRequestType;
+
+    card.style.display = isVisible ? '' : 'none';
+    if (isVisible) visibleCount += 1;
+  });
+
+  const hasActiveFilter = selectedFilters.service !== 'all'
+    || selectedFilters.readStatus !== 'all'
+    || selectedFilters.requestTypes.length > 0;
+  document.querySelectorAll('#tab-estimate .list-promo').forEach(promo => {
+    promo.style.display = hasActiveFilter ? 'none' : '';
+  });
+  updateFilterEmptyState(visibleCount === 0);
+}
+
+function updateFilterEmptyState(isEmpty) {
+  const empty = document.getElementById('filter-empty');
+  if (!isEmpty) {
+    empty.style.display = 'none';
+    return;
+  }
+
+  const title = document.getElementById('filter-empty-title');
+  const desc = document.getElementById('filter-empty-desc');
+  const action = document.getElementById('filter-empty-action');
+  const hasSoomgoPlusFilter = selectedFilters.requestTypes.includes('soomgo-plus');
+  const hasDesignatedFilter = selectedFilters.requestTypes.includes('designated');
+
+  empty.style.display = 'flex';
+  action.className = 'empty-action secondary';
+  action.onclick = resetAllFilters;
+  action.textContent = '필터 초기화';
+
+  if (hasSoomgoPlusFilter) {
+    title.textContent = '숨고플러스로 더 많은 요청을 받아보세요';
+    desc.innerHTML = '조건에 맞는 숨고플러스 요청이 없어요.<br>광고를 신청하면 더 많은 고객 요청을 만날 수 있어요';
+    action.className = 'empty-action';
+    action.onclick = null;
+    action.textContent = '숨고플러스 신청하기';
+  } else if (selectedFilters.readStatus === 'unread') {
+    title.textContent = '안읽은 요청이 없어요';
+    desc.innerHTML = '현재 조건에 맞는 안읽은 요청이 없어요.<br>필터를 초기화하고 전체 요청을 확인해 보세요';
+  } else if (hasDesignatedFilter) {
+    if (hasDesignatedRequestSetting) {
+      title.textContent = '지정요청이 없어요';
+      desc.innerHTML = '현재 조건에 맞는 지정요청이 없어요.<br>필터를 초기화하고 전체 요청을 확인해 보세요';
+    } else {
+      title.textContent = '지정요청을 받을 수 있게 설정해 보세요';
+      desc.innerHTML = '고객이 고수님을 직접 선택해 요청할 수 있도록<br>지정요청 설정을 안내해 드릴게요';
+      action.className = 'empty-action';
+      action.onclick = null;
+      action.textContent = '지정요청 설정하기';
+    }
+  } else if (selectedFilters.service !== 'all') {
+    title.textContent = '선택한 서비스 요청이 없어요';
+    desc.innerHTML = '현재 조건에 맞는 서비스 요청이 없어요.<br>필터를 초기화하고 전체 요청을 확인해 보세요';
+  } else {
+    title.textContent = '조건에 맞는 요청이 없어요';
+    desc.innerHTML = '다른 필터를 선택해 보세요';
+  }
+}
+
+document.addEventListener('click', event => {
+  if (!event.target.closest('.filter-group')) {
+    document.querySelectorAll('[data-filter-menu]').forEach(menu => {
+      menu.hidden = true;
+    });
+  }
+});
+
+// Edge case: 바로예약 미확인 요청 있으면 바로예약 탭으로 랜딩
+const hasUnreadInstantBook = false;
+if (hasUnreadInstantBook) {
+  switchTab('instant');
+  const lbl = document.querySelector('[data-tab="instant"] .tab-label');
+  const d = document.createElement('span');
+  d.className = 'red-dot';
+  lbl.appendChild(d);
+}
+</script>
+</body>
+</html>
